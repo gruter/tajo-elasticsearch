@@ -26,9 +26,11 @@ import org.apache.tajo.SessionVars;
 import org.apache.tajo.algebra.*;
 import org.apache.tajo.annotation.Nullable;
 import org.apache.tajo.catalog.*;
-import org.apache.tajo.catalog.proto.CatalogProtos.StoreType;
 import org.apache.tajo.common.TajoDataTypes.DataType;
-import org.apache.tajo.plan.*;
+import org.apache.tajo.plan.InvalidQueryException;
+import org.apache.tajo.plan.LogicalPlan;
+import org.apache.tajo.plan.PlanningException;
+import org.apache.tajo.plan.Target;
 import org.apache.tajo.plan.expr.*;
 import org.apache.tajo.plan.logical.*;
 import org.apache.tajo.plan.visitor.BasicLogicalPlanVisitor;
@@ -40,9 +42,6 @@ import org.apache.tajo.util.TUtil;
 
 import java.io.IOException;
 import java.util.*;
-
-import static org.apache.tajo.catalog.proto.CatalogProtos.StoreType.CSV;
-import static org.apache.tajo.catalog.proto.CatalogProtos.StoreType.TEXTFILE;
 
 public class PlannerUtil {
 
@@ -883,7 +882,8 @@ public class PlannerUtil {
   }
 
   public static boolean isFileStorageType(String storageType) {
-    if (storageType.equalsIgnoreCase("hbase")) {
+    if (storageType.equalsIgnoreCase("hbase") ||
+        storageType.equalsIgnoreCase("elasticsearch") ) {
       return false;
     } else {
       return true;

@@ -25,8 +25,10 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.tajo.*;
-import org.apache.tajo.catalog.*;
-import org.apache.tajo.catalog.proto.CatalogProtos;
+import org.apache.tajo.catalog.Schema;
+import org.apache.tajo.catalog.SortSpec;
+import org.apache.tajo.catalog.TableDesc;
+import org.apache.tajo.catalog.TableMeta;
 import org.apache.tajo.catalog.proto.CatalogProtos.FragmentProto;
 import org.apache.tajo.conf.TajoConf;
 import org.apache.tajo.conf.TajoConf.ConfVars;
@@ -305,6 +307,8 @@ public abstract class StorageManager {
     String typeName;
     if (storeType.equalsIgnoreCase("HBASE")) {
       typeName = "hbase";
+    } else if ( storeType.equalsIgnoreCase("ELASTICSEARCH")) {
+      typeName = "elasticsearch";
     } else {
       typeName = "hdfs";
     }
