@@ -1,0 +1,499 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+option java_package = "org.apache.tajo.plan.serder";
+option java_outer_classname = "PlanProto";
+option java_generic_services = false;
+option java_generate_equals_and_hash = true;
+
+import "PrimitiveProtos.proto";
+import "CatalogProtos.proto";
+import "DataTypes.proto";
+
+enum NodeType {
+  SET_SESSION = 0;
+
+  ROOT = 1;
+  EXPRS = 2;
+  PROJECTION = 3;
+  LIMIT = 4;
+  WINDOW_AGG = 5;
+  SORT = 6;
+  HAVING = 7;
+  GROUP_BY = 8;
+  DISTINCT_GROUP_BY = 9;
+  SELECTION = 10;
+  JOIN = 11;
+  UNION = 12;
+  INTERSECT = 13;
+  EXCEPT = 14;
+  TABLE_SUBQUERY = 15;
+  SCAN = 16;
+  PARTITIONS_SCAN = 17;
+  BST_INDEX_SCAN = 18;
+  STORE = 19;
+  INSERT = 20;
+
+  CREATE_DATABASE = 21;
+  DROP_DATABASE = 22;
+  CREATE_TABLE = 23;
+  DROP_TABLE = 24;
+  ALTER_TABLESPACE = 25;
+  ALTER_TABLE = 26;
+  TRUNCATE_TABLE = 27;
+}
+
+message LogicalNodeTree {
+  repeated LogicalNode nodes = 1;
+}
+
+message LogicalNode {
+  required int32 visitSeq = 1;
+  required int32 nodeId = 2;
+  required NodeType type = 3;
+  optional SchemaProto in_schema = 4;
+  optional SchemaProto out_schema = 5;
+
+  optional ScanNode scan = 6;
+  optional PartitionScanSpec partitionScan = 7;
+  optional JoinNode join = 8;
+  optional FilterNode filter = 9;
+  optional GroupbyNode groupby = 10;
+  optional DistinctGroupbyNode distinctGroupby = 11;
+  optional SortNode sort = 12;
+  optional LimitNode limit = 13;
+  optional WindowAggNode windowAgg = 14;
+  optional ProjectionNode projection = 15;
+  optional EvalExprNode exprEval = 16;
+  optional UnionNode union = 17;
+  optional TableSubQueryNode tableSubQuery = 18;
+  optional PersistentStoreNode persistentStore = 19;
+  optional StoreTableNodeSpec storeTable = 20;
+  optional InsertNodeSpec insert = 21;
+  optional CreateTableNodeSpec createTable = 22;
+  optional RootNode root = 23;
+  optional SetSessionNode setSession = 24;
+
+  optional CreateDatabaseNode createDatabase = 25;
+  optional DropDatabaseNode dropDatabase = 26;
+  optional DropTableNode dropTable = 27;
+
+  optional AlterTablespaceNode alterTablespace = 28;
+  optional AlterTableNode alterTable = 29;
+  optional TruncateTableNode truncateTableNode = 30;
+}
+
+message ScanNode {
+  required TableDescProto table = 1;
+  optional string alias = 2;
+  required bool existTargets = 3;
+  repeated Target targets = 4;
+  optional EvalNodeTree qual = 5;
+  optional bool broadcast = 6;
+}
+
+message PartitionScanSpec {
+  repeated string paths = 1;
+}
+
+message FilterNode {
+  required int32 childSeq = 1;
+  required EvalNodeTree qual = 2;
+}
+
+message JoinNode {
+  required int32 leftChildSeq = 1;
+  required int32 rightChilSeq = 2;
+  required JoinType joinType = 3;
+  optional EvalNodeTree joinQual = 4;
+  required bool existsTargets = 5;
+  repeated Target targets = 6;
+}
+
+message GroupbyNode {
+  required int32 childSeq = 1;
+  required bool distinct = 2;
+  repeated ColumnProto groupingKeys = 3;
+  repeated EvalNodeTree aggFunctions = 4;
+  repeated Target targets = 5;
+}
+
+message DistinctGroupbyNode {
+  required int32 childSeq = 1;
+  optional LogicalNode groupbyNode = 2;
+  repeated LogicalNode subPlans = 3;
+  repeated Target targets = 4;
+  repeated ColumnProto groupingKeys = 5;
+  repeated int32 resultId = 6;
+  repeated EvalNodeTree aggFunctions = 7;
+}
+
+message SortNode {
+  required int32 childSeq = 1;
+  repeated SortSpecProto sortSpecs = 2;
+}
+
+message LimitNode {
+  required int32 childSeq = 1;
+  required int64 fetchFirstNum = 2;
+}
+
+message WindowAggNode {
+  required int32 childSeq = 1;
+  repeated ColumnProto partitionKeys = 2;
+  repeated SortSpecProto sortSpecs = 3;
+  repeated EvalNodeTree windowFunctions = 4;
+  required bool  distinct = 5; // if distinct aggregation function is included in window function
+  repeated Target targets = 6;
+}
+
+message UnionNode {
+  required int32 leftChildSeq = 1;
+  required int32 rightChildSeq = 2;
+  required bool all = 3;
+}
+
+message TableSubQueryNode {
+  required int32 childSeq = 1;
+  required string tableName = 2;
+  repeated Target targets = 3;
+}
+
+message ProjectionNode {
+  required int32 childSeq = 1;
+  required bool distinct = 2;
+  repeated Target targets = 3;
+}
+
+message EvalExprNode {
+  repeated Target targets = 1;
+}
+
+message RootNode {
+  required int32 childSeq = 1;
+}
+
+message SetSessionNode {
+  required string name = 1;
+  optional string value = 2;
+}
+
+message Target {
+  required EvalNodeTree expr = 1;
+  optional string alias = 2;
+}
+
+enum JoinType {
+  CROSS_JOIN = 0;
+  INNER_JOIN = 1;
+  LEFT_OUTER_JOIN = 2;
+  RIGHT_OUTER_JOIN = 3;
+  FULL_OUTER_JOIN = 4;
+  UNION_JOIN = 5;
+  LEFT_ANTI_JOIN = 6;
+  RIGHT_ANTI_JOIN = 7;
+  LEFT_SEMI_JOIN = 8;
+  RIGHT_SEMI_JOIN = 9;
+}
+
+message PartitionTableScanSpec {
+  repeated string paths = 1;
+}
+
+message PersistentStoreNode {
+  required int32 childSeq = 1;
+  required string storageType = 2;
+  required KeyValueSetProto tableProperties = 3;
+}
+
+message StoreTableNodeSpec { // required PersistentStoreSpec
+  optional string tableName = 1; // 'INSERT INTO LOCATION' does not require 'table name'.
+  optional PartitionMethodProto partitionMethod = 2;
+}
+
+message InsertNodeSpec { // required PersistentStoreSpec and StoreTableSpec
+  required bool overwrite = 1;
+  required SchemaProto tableSchema = 2;
+  optional SchemaProto targetSchema = 4;
+  optional SchemaProto projectedSchema = 3;
+  optional string path = 5;
+}
+
+message CreateTableNodeSpec { // required PersistentStoreSpec and StoreTableNodeSpec
+  required SchemaProto schema = 1;
+  required bool external = 2;
+  required bool ifNotExists = 3;
+  optional string path = 4;
+}
+
+message DropTableNode {
+  required string tableName = 1;
+  required bool ifExists = 2;
+  required bool purge = 3;
+}
+
+message TruncateTableNode {
+  repeated string tableNames = 1;
+}
+
+message CreateDatabaseNode {
+  required string dbName = 1;
+  required bool ifNotExists = 2;
+}
+
+message DropDatabaseNode {
+  required string dbName = 1;
+  required bool ifExists = 2;
+}
+
+message AlterTablespaceNode {
+  enum Type {
+    LOCATION = 0;
+  }
+
+  message SetLocation {
+    required string location = 1;
+  }
+
+  required string tableSpaceName = 1;
+  required Type setType = 2;
+  optional SetLocation setLocation = 3;
+}
+
+message AlterTableNode {
+  enum Type {
+    RENAME_TABLE = 0;
+    RENAME_COLUMN = 1;
+    ADD_COLUMN = 2;
+    SET_PROPERTY = 3;
+  }
+
+  message RenameTable {
+    required string newName = 1;
+  }
+
+  message RenameColumn {
+    required string oldName = 1;
+    required string newName = 2;
+  }
+
+  message AddColumn {
+    required ColumnProto addColumn = 1;
+  }
+
+  required string tableName = 1;
+  required Type setType = 2;
+  optional RenameTable renameTable = 3;
+  optional RenameColumn renameColumn = 4;
+  optional AddColumn addColumn = 5;
+  optional KeyValueSetProto properties = 6;
+}
+
+enum EvalType {
+  NOT = 0;
+  AND = 1;
+  OR = 2;
+  EQUAL = 3;
+  IS_NULL = 4;
+  NOT_EQUAL = 5;
+  LTH = 6;
+  LEQ = 7;
+  GTH = 8;
+  GEQ = 9;
+  PLUS = 10;
+  MINUS = 11;
+  MODULAR = 12;
+  MULTIPLY = 13;
+  DIVIDE = 14;
+
+  // Binary Bitwise expressions
+  BIT_AND = 15;
+  BIT_OR = 16;
+  BIT_XOR = 17;
+
+  // Function
+  WINDOW_FUNCTION = 18;
+  AGG_FUNCTION = 19;
+  FUNCTION = 20;
+  PYTHON_FUNCTION = 21;
+
+  // String operator or pattern matching predicates
+  LIKE = 22;
+  SIMILAR_TO = 23;
+  REGEX = 24;
+  CONCATENATE = 25;
+
+  // Other predicates
+  BETWEEN = 26;
+  CASE = 27;
+  IF_THEN = 28;
+  IN = 29;
+
+  // Value or Reference
+  SIGNED = 30;
+  CAST = 31;
+  ROW_CONSTANT = 32;
+  FIELD = 33;
+  CONST = 34;
+}
+
+message EvalNodeTree {
+  repeated EvalNode nodes = 1;
+}
+
+message EvalNode {
+  required int32 id = 1;
+  required EvalType type = 2;
+  required DataType data_type = 3;
+
+  optional UnaryEval unary = 4; // NOT
+  optional BinaryEval binary = 5;
+  optional ConstEval const = 6;
+  optional ColumnProto field = 7; // field eval
+  optional FunctionEval function = 8;
+  optional AggFunctionEvalSpec aggFunction = 9;
+  optional WinFunctionEvalSpec winFunction = 10;
+  optional RowConstEval rowConst = 11;
+  optional BetweenEval between = 12;
+  optional CaseWhenEval casewhen = 13;
+  optional IfCondEval ifCond = 14;
+  optional PatternMatchEvalSpec patternMatch = 15;
+}
+
+message UnaryEval {
+  required int32 child_id = 1;
+  optional DataType castingType = 2;
+  optional bool negative = 3;
+  optional string timezone = 4;
+}
+
+message BinaryEval {
+  required int32 lhs_id = 1;
+  required int32 rhs_id = 2;
+  optional bool negative = 3 [default = false];
+}
+
+message PatternMatchEvalSpec { // requires BinaryEval
+  optional bool caseSensitive = 1;
+}
+
+message BetweenEval {
+  required int32 predicand = 1;
+  required int32 begin = 2;
+  required int32 end = 3;
+  optional bool negative = 4 [default = false];
+  optional bool symmetric = 5 [default = false];
+}
+
+message CaseWhenEval {
+  repeated int32 ifConds = 1;
+  optional int32 else = 2;
+}
+
+message IfCondEval {
+  required int32 condition = 1;
+  required int32 then = 2;
+}
+
+message ConstEval {
+  required Datum value = 1;
+}
+
+message RowConstEval {
+  repeated Datum values = 1;
+}
+
+message FunctionEval {
+  required FunctionDescProto funcion = 1;
+  repeated int32 paramIds = 2;
+}
+
+message AggFunctionEvalSpec { // requires FunctionEval
+  required bool intermediatePhase = 1;
+  required bool finalPhase = 2;
+  optional string alias = 3;
+}
+
+message WinFunctionEvalSpec {
+  message WindowFrame {
+    required WindowStartBound startBound = 1;
+    required WindowEndBound endBound = 2;
+    optional WindowFrameUnit unit = 3;
+  }
+
+  enum WindowFrameStartBoundType {
+    S_UNBOUNDED_PRECEDING = 0;
+    S_CURRENT_ROW = 1;
+    S_PRECEDING = 2;
+  }
+
+  enum WindowFrameEndBoundType {
+    E_UNBOUNDED_FOLLOWING = 0;
+    E_CURRENT_ROW = 1;
+    E_FOLLOWING = 2;
+  }
+
+  enum WindowFrameUnit {
+    ROW = 0;
+    RANGE = 1;
+  }
+
+  message WindowStartBound {
+    required WindowFrameStartBoundType boundType = 1;
+    optional EvalNodeTree number = 2;
+  }
+
+  message WindowEndBound {
+    required WindowFrameEndBoundType boundType = 1;
+    optional EvalNodeTree number = 2;
+  }
+
+  repeated SortSpecProto sortSpec = 1;
+  required WindowFrame windowFrame = 2;
+}
+
+message Datum {
+  required Type type = 1;
+  optional bool boolean = 2;
+  optional int32 int4 = 3;    // int4, date
+  optional int64 int8 = 4;    // int8, timestamp, and time
+  optional float float4 = 5;
+  optional double float8 = 6;
+  optional string text = 7;
+  optional bytes blob = 8;
+  optional Interval interval = 12;
+  optional Datum actual = 13; // for ANY type datum
+}
+
+message Interval {
+  optional int32 month = 1 [default = 0];
+  optional int64 msec = 2;
+}
+
+enum ShuffleType {
+  NONE_SHUFFLE = 0;
+  HASH_SHUFFLE = 1;
+  RANGE_SHUFFLE = 2;
+  SCATTERED_HASH_SHUFFLE = 3;
+}
+
+enum TransmitType {
+  PUSH_TRANSMIT = 0;
+  PULL_TRANSMIT = 1;
+  FILE_WRITE = 2;
+}

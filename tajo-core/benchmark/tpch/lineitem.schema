@@ -1,0 +1,19 @@
+create table lineitem (
+	l_orderkey long,
+	l_partkey long,
+	l_suppkey long,
+	l_linenumber int,
+	l_quantity double,
+	l_extendedprice double,
+	l_discount double,
+	l_tax double,
+	l_returnflag string,
+	l_linestatus string,
+	l_shipdate string,
+	l_commitdate string,
+	l_receiptdate string,
+	l_shipinstruct string,
+	l_shipmode string,
+	l_comment string
+	/* primary key (l_orderkey, l_linenumber) */
+) 

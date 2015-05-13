@@ -1,0 +1,110 @@
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~     http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+
+Apache Tajo&#153;: A big data warehouse system on Hadoop
+
+  Apache Tajo is a robust big data relational and distributed data warehouse system for Apache Hadoop.
+  Tajo is designed for low-latency and scalable ad-hoc queries, online aggregation,
+  and ETL (extract-transform-load process) on large-data sets stored on HDFS (Hadoop Distributed File System)
+  and other data sources. By supporting SQL standards and leveraging advanced database techniques,
+  Tajo allows direct control of distributed execution and data flow across a variety of query evaluation
+  strategies and optimization opportunities.
+
+Features
+
+  * <<Fast and Efficient>>
+
+    * Fully distributed SQL query processing engine
+
+    * Advanced Query Optimization such as cost-based and progressive query optimization
+
+    * Interactive analysis on reasonable data set
+
+  * <<Scalable>>
+
+    * Fault tolerance and dynamic scheduling for long-running queries
+
+    * Out-of-core algorithms for data sets larger than main memory
+
+  * <<Compatible>>
+
+    * ANSI/ISO SQL standard compliance
+
+    * Hive MetaStore access support
+
+    * JDBC driver support
+
+    * Various file formats support, such as CSV, JSON, RCFile, SequenceFile and Parquet
+
+  * <<Easy>>
+
+    * User-defined functions
+
+    * Interactive shell
+
+    * Convenient Backup/Restore utility
+
+    * Asynchronous/Synchronous Java API
+
+Releases
+
+  * <<[2015-03-08]>> {{{./downloads.html}Tajo 0.10.0}} ({{{./releases/0.10.0/announcement.html}Announcement}}, {{{./releases/0.10.0/relnotes.html}Release Notes}})
+
+  * <<[2014-10-21]>> {{{./downloads.html}Tajo 0.9.0}} ({{{./releases/0.9.0/announcement.html}Announcement}}, {{{./releases/0.9.0/relnotes.html}Release Notes}})
+
+  * <<[2014-05-01]>> {{{./downloads.html}Tajo 0.8.0}} ({{{./releases/0.8.0/announcement.html}Announcement}}, {{{./releases/0.8.0/relnotes.html}Release Notes}})
+
+  * <<[2013-11-20]>> {{{./downloads.html}Tajo 0.2.0-incubating}} ({{{http://s.apache.org/tajo-0.2-release-notes}Release Notes}})
+
+News
+
+  * <<[2014-12-05]>> Hyoung Jun Kim was elected as a Tajo PMC member.
+
+  * <<[2014-12-05]>> Jihun Kang was invited to a new committer.
+
+  * <<[2014-08-06]>> Hyoung Jun Kim was invited to a new committer.
+
+  * <<[2014-06-14]>> Hyunsik Choi had a talk at {{{https://www.campsite.org/bigdatacampla/event/531}Big Data Camp LA 2014}}. ({{{http://www.slideshare.net/gruter/tajo-la-bigdatacamp2014}Slide}})
+
+  * <<[2014-06-02]>> Hyunsik Choi had a talk at {{{http://hadoopsummit.org/san-jose/}Hadoop Summit North America 2014}}. ({{{http://www.slideshare.net/gruter/hadoop-summit-2014-query-optimization-and-jitbased-vectorized-execution-in-apache-tajo}Slide}})
+
+  * <<[2014-05-24]>> Alvin Derek Henrick was invited to a new committer.
+
+  * <<[2014-04-01]>> Keuntae Park presented the real usecases of Apache Tajo in ApacheCon North America 2014. ({{{http://www.youtube.com/watch?v=m8THYeA8R7Q}Video}}, {{{http://events.linuxfoundation.org/sites/events/files/slides/ApacheCon_Keuntae_Park_0.pdf}Slide}})
+
+  * <<[2014-04-01]>> Min Zhou was invited to a new committer.
+
+  * <<[2014-03-24]>> Apache Tajo became Apache Top-level Project.
+
+  * <<[2014-02-27]>> Keuntae Park was invited to ApacheConf 2014 ({{{http://sched.co/1bsN9iE}schedule}}).
+
+  * <<[2014-01-02]>> Keuntae Park was invited to become a new committer.
+
+  * <<[2013-11-20]>> Tajo 0.2.0-incubating Released. Now available for {{{http://apache.org/dyn/closer.cgi/incubator/tajo/tajo-0.2.0-incubating/}download}}!
+
+  * <<[2013-10-15]>> Tajo was presented at {{{http://www.meetup.com/hadoop/events/146077932/}Bay Area Hadoop User Group - LinkedIn Special Event}}.
+
+  * <<[2013-10-15]>> Tajo was introduced at {{{http://deview.kr/2013/detail.nhn?topicSeq=55}Deview 2013}}.
+
+  * <<[2013-05-27]>> Two projects were accepted to Google Summer of Code 2013.
+
+  * <<[2013-04-09]>> Tajo was demonstrated at IEEE ICDE 2013.
+
+  * <<[2013-03-07]>> Tajo Project enters incubation.
+
+  * <<[2012-10-15]>> A demonstration paper of Tajo was accepted to IEEE ICDE 2013.
+
+

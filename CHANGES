@@ -1,0 +1,2403 @@
+Tajo Change Log 
+
+Release 0.11.0 - unreleased
+
+  NEW FEATURES
+
+    TAJO-1562: Python UDAF support. (jihoon)
+
+    TAJO-1344: Python UDF support. (jihoon)
+
+    TAJO-923: Add VAR_SAMP and VAR_POP window functions. 
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1494: Add SeekableScanner support to DelimitedTextFileScanner.
+    (jinho)
+
+    TAJO-921: Add STDDEV_SAMP and STDDEV_POP window functions. (Keuntae Park)
+
+    TAJO-1135: Implement queryable virtual table for cluster information.
+    (jihun)
+
+    TAJO-1430: Improve SQLAnalyzer by session-based parsing-result caching.
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+  IMPROVEMENT
+
+    TAJO-1591: Change StoreType represented as Enum to String type. (hyunsik)
+
+    TAJO-1452: Improve function listing order (Contributed Dongjoon Hyun, 
+    Committed by hyunsik)
+
+    TAJO-1576: Sometimes DefaultTajoCliOutputFormatter.parseErrorMessage() 
+    eliminates an important kind of information. 
+    (Contributed by Jongyoung Park, Committed by jihoon)
+
+    TAJO-1408: Make IntermediateEntryProto more compact. 
+    (Contributed by navis, Committed by hyunsik)
+
+    TAJO-1584: Remove QueryMaster client sharing in TajoMaster and TajoWorker.
+    (jinho)
+
+    TAJO-1563: Improve RPC error handling. (jinho)
+
+    TAJO-1311: Enable Scattered Hash Shuffle for CTAS statement. (jaehwa)
+
+    TAJO-1548: Refactoring condition code for CHAR into CatalogUtil.
+    (Contributed by DaeMyung Kang, Committed by jaehwa)
+
+    TAJO-1570: CatalogUtil newSimpleDataTypeArray should use newSimpleDataType.
+    (Contributed by DaeMyung Kang, Committed by jihoon)
+
+    TAJO-1442: Improve Hive Compatibility. (jaehwa)
+
+    TAJO-1530: Display warn message when the query kill button is clicked in 
+    WEB UI. (Contributed by Dongjoon Hyun, Committed by hyoungjun)
+  
+    TAJO-1509: Use dedicated thread to release resource allocated to container.
+    (Contributed by navis, Committed by hyoungjun)
+
+    TAJO-1454: Comparing two date or two timestamp need not normalizing
+    (Contributed by navis, Committed by hyoungjun)
+
+    TAJO-1385: Remove locking on RMContext. (Contributed by navis, 
+    Committed by jihoon)
+
+    TAJO-1499: Check the bind status when EvalNode::eval() is called. (jihoon)
+
+    TAJO-1400: Add TajoStatement::setMaxRows method support.
+    (Contributed by YeonSu Han, Committed by jihoon)
+
+    TAJO-1421: Add 'ALTER TABLE SET PROPERTY' statement.
+    (Contributed by Yongjin Choi. Committed by jaehwa)
+
+    TAJO-1501: Too many log message of HashShuffleAppenderManager.
+    (Contributed by Jongyoung Park. Committed by jaehwa)
+
+    TAJO-1428: Support min, max builtin functions for DATE, TIME, TIMESTAMP.
+    (Contributed by Dongjoon Hyun, Committed by Keuntae Park)
+
+    TAJO-1436: Add Bind method to EvalNode. (Contributed by navis,
+    Committed by jihoon)
+
+    TAJO-1495: Clean up CatalogStore. (jaehwa)
+   
+    TAJO-1460: Apply TAJO-1407 to ExternalSortExec. (Contributed by navis, 
+    Committed by hyoungjun)
+
+    TAJO-1350: Refactor FilterPushDownRule::visitJoin() into well-defined, 
+    small methods. (jihoon)
+
+    TAJO-1426: Support "explain global" to get physical plan. (Contributed by
+    navis, Committed by jihoon)
+
+    TAJO-1407: Minor performance improvement of MemSortExec. (Contributed by
+    navis, Committed by jihoon)
+
+    TAJO-1403: Improve 'Simple Query' with only partition columns and constant 
+    values. (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1418: Comment on TAJO_PULLSERVER_STANDALONE in tajo-env.sh 
+    is not consistent. (Contributed by navis, Committed by hyunsik)
+
+    TAJO-1381: Support multi-bytes delimiter for Text file.
+    (Contributed by navis, Committed by jinho)
+
+    TAJO-1391: RpcConnectionPool should check reference counter of connection 
+    before close. (Contributed by navis, Committed by jihun)
+
+    TAJO-1383: Improve broadcast table cache. (jinho)
+
+    TAJO-1374: Support multi-bytes delimiter for CSV file.
+    (Contributed by navis, Committed by jinho)
+
+    TAJO-1395: Remove deprecated sql files for Oracle and PostgreSQL. (jihun)
+
+    TAJO-1394: Support reconnect on tsql. 
+    (Contributed by navis, Committed by hyunsik)
+
+    TAJO-527: Upgrade to Netty 4. (jihun)
+
+    TAJO-1369: Some stack trace information is missed in error/fail logging. 
+    (Contributed by navis, Committed by hyunsik)
+
+  BUG FIXES
+
+    TAJO-1598: TableMeta should change equals mechanism.
+    (Contributed by DaeMyung Kang, Committed by jihoon)
+
+    TAJO-1593: Add missing stop condition to Taskrunner. (jinho)
+
+    TAJO-1556: "insert into select" with reordered column list does not work.
+    (Contributed by Yongjin Choi, Committed by jihoon)
+
+    TAJO-1534: DelimitedTextFile return null instead of a NullDatum. (jinho)
+
+    TAJO-1574: Fix NPE on natural join.
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1581: Does not update last state of query stage in non-hash shuffle.
+    (jinho)
+
+    TAJO-1580: Error line number is incorrect.
+    (Contributed by Jongyoung Park. Committed by jaehwa)
+
+    TAJO-1419: Tsql session command doesn't work. (Contributed by DaeMyung Kang,
+    Committed by jihoon)
+
+    TAJO-1481: Numeric conversion of Inet4 type should be considered as unsigned.
+    (Contributed by navis, Committed by jihoon)
+
+    TAJO-1522: NPE making stage history before task scheduler is initialized.
+    (Contributed by navis, Committed by jinho)
+
+    TAJO-1560: HashShuffle report should be ignored when a succeed tasks are not
+    included. (jinho)
+
+    TAJO-1569: BlockingRpcClient can make other request fail. (jinho)
+
+    TAJO-1564: TestFetcher fails occasionally. (jinho)
+
+    TAJO-1497: RPC client does not share a connection. (jinho)
+
+    TAJO-1467: Parenthesis at the start of SQL query is ignored. 
+    (Keuntae Park)
+
+    TAJO-1541: Connection timeout in netty client is not working.
+    (Contributed by navis, Committed by jihun)
+
+    TAJO-1500: FinishedTaskCleanThread is not interrupted when worker stops.
+    (Contributed by navis, Committed by jihoon)
+
+    TAJO-1469: allocateQueryMaster can leak resources if it times-out (3sec, 
+    hardcoded) (Contributed by navis, Committed by hyoungjun)
+
+    TAJO-1538: TajoWorkerResourceManager.allocatedResourceMap is increasing 
+    forever. (Contributed by navis. Committed by jinho)
+
+    TAJO-1510: Change a function name from getFileCunks to getFileChunks.
+    (Contributed by Soonwoong Lee, Committed by jaehwa)
+
+    TAJO-1360: VALUES_ field in OPTIONS table of catalog store should be longer.
+    (Contributed by DaeMyung Kang, Committed by jihun)
+
+    TAJO-1479: NPE during startup CatalogStore. (jaehwa)
+
+    TAJO-1437: Resolve findbug warnings on Tajo JDBC Module. 
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1438: Resolve findbug warnings on Tajo Client Module. 
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1440: Some tests fail in parallel test environment in TestKillQuery.
+    (Contributed by Jongyoung Park. Committed by jinho)
+
+    TAJO-1147: Simple query doesn't work in Web UI.
+    (Contributed by Jongyoung Park. Committed by jaehwa)
+
+    TAJO-1434: Fix supporting version of Hadoop. 
+    (Contributed by Dongjoon Hyun, Committed by jinho)
+
+    TAJO-1449: TestSelectQuery.testExplainSelect() fails. (jihoon)
+
+    TAJO-1396: Unexpected IllegalMonitorStateException can be thrown 
+    in QueryInProgress. (Contributed by navis. Committed by jinho)
+
+    TAJO-1414: Two RemoteException in rpc module. 
+    (Contributed by navis. Committed by jihun)
+
+    TAJO-1368: Exceptions during processing nested union queries.
+    (jihun)
+
+    TAJO-1405: Fix some illegal way of usages on connection pool. 
+    (Contributed by navis, Committed by Keuntae Park)
+
+    TAJO-1384: Duplicated output file path problem. (jihoon)
+
+    TAJO-1386: CURRENT_DATE generates parsing errors sometimes.
+    (Contributed by navis, Committed by hyunsik)
+
+    TAJO-1387: Correct error message for EXISTS clause.
+    (Contributed by Dongjoon Hyun, Committed by hyunsik)
+
+    TAJO-1378: Incorrect version(0.8.0) info in tajo-doc. 
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1370: TUtils.checkEquals() is not consistent with description 
+    in javadoc. (Contributed by navis, Committed by hyunsik)
+
+    TAJO-1362: Resolve findbug warnings on Tajo Core Module. (jihun)
+
+    TAJO-1366: The timestamp type conversion occasionally leads to wrong 
+    results. (jihoon)
+
+    TAJO-1365: Suppress release audit warnings on Jekins builds. (jihun)
+
+    TAJO-1357: Resolve findbugs warnings on Tajo Catalog Modules. (jihun)
+
+    TAJO-1351: Resolve findbug warnings on Tajo Common Module. (jihun)
+  
+  TASKS
+
+    TAJO-1583: Remove ServerCallable in RPC client. (jinho)
+
+    TAJO-1587: Upgrade java version to 1.7 for Travis CI. (jihoon)
+
+    TAJO-1559: Fix data model description (tinyint, smallint).
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1575: HBASE_HOME guidance is duplicated in tajo-env.sh.
+    (Contributed by Jongyoung Park, Committed by jihoon)
+
+    TAJO-1568: Apply UnpooledByteBufAllocator when a tajo.test.enabled
+    is set to enable. (jinho)
+
+    TAJO-1567: Update old license in some pom.xml files.
+    (Contributed by Dongjoon Hyun, Committed by jinho)
+
+    TAJO-1526: Investigate the frequent failures of Travis CI. (jihoon)
+
+    TAJO-1462: Replace CSV examples into TEXT examples in docs. 
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1424: Investigate the problem of too many "Try to connect" messeges 
+    during Travic CI build. (Contributed by navis, Committed by jihoon)
+
+    TAJO-1482: Cleanup the legacy cluster mode. (jinho)
+
+    TAJO-1439: Some method name is written wrongly. 
+    (Contributed by Jongyoung Park. Committed by jihoon)
+
+    TAJO-1398: Fix 'Getting Started' link error from 0.9.0 into 0.10.0. 
+    (Contributed by Dongjoon Hyun, Committed by jihoon)
+
+    TAJO-1380: Update JDBC documentation for new JDBC driver.
+    (Contributed by Dongjoon Hyun, Committed by hyunsik)
+
+    TAJO-1335: Bump up 0.10.0-SNAPSHOT to 0.11.0-SNAPSHOT in master branch. 
+    (hyunsik)
+
+    TAJO-1314: Documentation for the support of the swift. (jihoon)
+
+
+  SUB TASKS
+
+    TAJO-1359: Add nested field projector and language extension to project 
+    nested record. (hyunsik)
+
+    TAJO-1529: Implement json_extract_path_text(string, string) function.
+    (jinho)
+
+    TAJO-1338: Defines RESTful API for Clients. (jihun)
+
+    TAJO-1284: Add alter partition method to CatalogStore. (jaehwa)
+
+    TAJO-1392: Resolve findbug warnings on Tajo Plan Module. (jihun)
+
+    TAJO-1393: Resolve findbug warnings on Tajo Cli Module.
+    (Contributed by Dongjoon Hyun, Committed by hyunsik)
+
+    TAJO-1337: Implements common modules to handle RESTful API. (jihun)
+
+    TAJO-1329: Improve Schema class to support nested struct support.
+    (hyunsik)
+
+    TAJO-1353: Nested record support in CREATE TABLE statement. (hyunsik)
+
+
+Release 0.10.0 - Released
+
+  NEW FEATURES
+
+    TAJO-919: Implement LAG and LEAD window functions. (Keuntae Park)
+
+    TAJO-920: Add FIRST_VALUE and LAST_VALUE window functions. 
+    (Keuntae Park via hyunsik)
+
+    TAJO-1238: Add SET SESSION and RESET statement. (hyunsik)
+
+    TAJO-1222: DelimitedTextFile should be tolerant against parsing errors.
+    (hyunsik)
+
+    TAJO-1131: Supports Inserting or Creating table into 
+    the HBase mapped table.(Hyoungjun Kim)
+
+
+    TAJO-1026: Implement Query history persistency manager.(Hyoungjun Kim)
+
+    TAJO-233: Support PostgreSQL CatalogStore. (Jihun Kang via hyunsik)
+
+    TAJO-235: Support Oracle CatalogStore. (Jihun Kang via hyunsik)
+
+    TAJO-1095: Implement Json file scanner. (hyunsik)
+
+  IMPROVEMENT
+
+    TAJO-1160: Remove Hadoop dependency from tajo-client module. (jinho)
+
+    TAJO-1269: Separate cli from tajo-client. (hyunsik)
+
+    TAJO-1328: Fix deprecated property names in the catalog configuration
+    document. (jihun)
+
+    TAJO-1317: Parallel Test Executions on Tajo Core Project. (jihun)
+
+    TAJO-1320: HBaseStorageManager need to support Zookeeper Client Port.
+    (jaehwa)
+
+    TAJO-1309: Add missing break point in physical operator. (jinho)
+
+    TAJO-1307: HBaseStorageManager need to support for users to use
+    hbase-site.xml file. (jaehwa)
+
+    TAJO-1290: Add HBase Storage Integration Documentation. (jaehwa)
+
+    TAJO-1293: Tajo have to accept hostname beginning with digits.
+    (Jinhang Choi via jihun)
+
+    TAJO-1281: Remove hadoop-common dependency from tajo-rpc. (hyunsik)
+
+    TAJO-1291: Rename TajoMasterProtocol to QueryCoordinatorProtocol.
+    (hyunsik)
+
+    TAJO-1286: Remove netty dependency from tajo-jdbc. (jihun)
+
+    TAJO-1282: Cleanup the relationship of QueryInProgress and 
+    QueryJobManager. (hyunsik)
+
+    TAJO-1258: Close() for classes derived from FileAppender should be robust.
+    (Jongyoung Park via jinho)
+
+    TAJO-1288: Refactoring org.apache.tajo.master package. (hyunsik)
+
+    TAJO-1279: Cleanup TajoAsyncDispatcher and interrupt stop events. 
+    (jinho)
+
+    TAJO-1285: Refactoring Magic Number to HAConstants. 
+    (DaeMyung Kang via jaehwa)
+
+    TAJO-1245: Add documentation about PostgreSQL and Oracle Catalog driver. 
+    (jihoon)
+
+    TAJO-1228: TajoClient should communicate with only TajoMaster without 
+    TajoWorker. (hyunsik)
+
+    TAJO-1176: Implements queryable virtual tables for catalog information
+    (jihun)
+
+    TAJO-269: Protocol buffer De/Serialization for LogicalNode. (hyunsik)
+
+    TAJO-1266: Too many logs when writing a parquet relation. 
+    (DaeMyung Kang via jihoon)
+
+    TAJO-1268: tajo-client module should not use UserGroupInformation. 
+    (hyunsik)
+
+    TAJO-1259: Change tsql history behavior. (Jaewoong Jung via hyunsik)
+
+    TAJO-1261: Separate query and ddl execution codes from GlobalEngine. 
+    (hyunsik)
+
+    TAJO-1247: Store type 'TEXTFILE' should be TEXT while keeping enum 
+    'TEXTFILE' in protobuf. (DaeMyung Kang via hyunsik)
+
+    TAJO-1221: HA TajoClient should not connect TajoMaster at the first. 
+    (jaehwa)
+
+    TAJO-1241: Change default client and table time zone behavior. (hyunsik)
+
+    TAJO-1243: *-site.xml.template should have default configs commented out.
+    (hyunsik)
+
+    TAJO-1143: TajoMaster, TajoWorker, and TajoClient should have 
+    diagnosis phase at startup. (Jihun Kang via hyunsik)
+
+    TAJO-1236: Remove slow 'new String' operation in parquet format. 
+    (jinho)
+
+    TAJO-1230: Disable ipv6 support on JVM. (Jihun Kang via hyunsik)
+
+    TAJO-1213: Implement CatalogStore::updateTableStats. (jaehwa)
+
+    TAJO-1122: Refactor the tajo-storage project structure.
+    (Hyoungjun Kim)
+    
+    TAJO-1165: Needs to show error messages on query_executor.jsp. 
+    (Jihun Kang via jaehwa)
+
+    TAJO-1204: Remove unused ServerName class. (DaeMyung Kang via jaehwa)
+
+    TAJO-1053: ADD PARTITIONS for HCatalogStore. (jaehwa)
+
+    TAJO-1195: Remove unused CachedDNSResolver Class. (DaeMyung Kang via jaehwa)
+
+    TAJO-1184: Upgrade netty-buffer to 4.0.24.Final. (jinho)
+
+    TAJO-1156: Improve the comparison of timestamp and date types. 
+    (Jihun Kang via jihoon)
+   
+    TAJO-1109: Separate SQL Statements from Catalog Stores.
+    (Jihun Kang via hyunsik)
+
+    TAJO-1161: Remove joda time dependency from tajo-core. 
+    (Jihun Kang via hyunsik)
+
+    TAJO-1133: Add 'bin/tajo version' command. (Jihun Kang via hyunsik)
+
+    TAJO-1145: Add 'bin/tajo --help' command. (Jihun Kang via hyunsik)
+
+    TAJO-1114: Improve ConfVars (SessionVar) to take a validator 
+    interface to check its input. (Jihun Kang via hyunsik)
+
+    TAJO-1140: Separate TajoClient into fine grained parts. (hyunsik)
+
+    TAJO-1132: More detailed version info in tsql. (hyunsik)
+
+    TAJO-1125: Separate logical plan and optimizer into a maven module.
+    (hyunsik)
+
+    TAJO-1123: Use Fragment instead of FileFragment.(Hyoungjun Kim)
+
+    TAJO-1092: Improve the function system to allow other function 
+    implementation types. (hyunsik)
+
+    TAJO-1121: Remove the 'v2' storage package. (Hyoungjun Kim)
+
+    TAJO-1128: Implement a select box for database at web interface. 
+    (Jongyoung Park via hyunsik)
+
+    TAJO-1174: remove unnessary codes for blobdatum.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-1169: Some older version of OpenJDK 1.6 does not get default 
+    timezone id. (Jihun Kang via hyunsik)
+
+    TAJO-1177: Reduce the use of Sun proprietary API. 
+    (Jihun Kang via hyunsik)
+
+    TAJO-1172: Remove Trevni storage type and its related classes.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-1163: TableDesc should use URI instead of Path. (hyunsik)
+
+    TAJO-1188: Fix testcase testTimestampConstructor in TestTimestampDatum.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-1209: Pluggable line (de)serializer for DelimitedTextFile.
+    (hyunsik)
+
+
+  BUG FIXES
+
+    TAJO-1356: Race conditions in QueryInProgress. (jinho)
+
+    TAJO-1277: GreedyHeuristicJoinOrderAlgorithm sometimes wrongly assumes 
+    associativity of joins. (Keuntae Park via jihoon)
+
+    TAJO-1336: Fix task failure of stopped task. (jinho)
+
+    TAJO-1316: NPE occurs when performing window functions after join.
+    (jihun)
+
+    TAJO-1325: Invalid history cleaner timeout. (jinho)
+
+    TAJO-1283: ORDER BY with the first descending order causes wrong results.
+    (Keuntae Park)
+
+    TAJO-1324: Remove warehouse directory rewriting in Unit Test. (jinho)
+
+    TAJO-1321: Cli prints wrong response time. (jihoon)
+
+    TAJO-1313: Tajo-dump creates DDLs for information_schema tables.
+    (jihun)
+
+    TAJO-1322: Invalid stored caching on StorageManager. (jinho)
+
+    TAJO-1319: Tajo can't find HBase configuration file. (jaehwa)
+
+    TAJO-1312: Stage causes Invalid event error: SQ_SHUFFLE_REPORT 
+    at KILLED. (jinho)
+
+    TAJO-1318: Unit test failure after miniDFS cluster restart. (jinho)
+
+    TAJO-1289: History reader fails to get the query information after 
+    a successful query execution. (jinho)
+
+    TAJO-1303: CDH cannot pass hadoop version check test.
+    (Keuntae Park via jihun)
+
+    TAJO-1308: QueryInprogress can not release when query is QUERY_ERROR.
+    (jinho)
+
+    TAJO-1305: With metadata storage of MySQL, columns with the same 
+    character but difference case are not allowed. (jihun)
+
+    TAJO-1257: ORDER BY with NULL FIRST misses some data. (Keuntae Park)
+
+    TAJO-1225: Fix wrong schema name in JDBC driver. (jaehwa)
+
+    TAJO-1304: Can not found TextFile in catalog. (jinho)
+
+    TAJO-1299: TB and PB representations in StorageUnit are overflow.
+    (jihun)
+
+    TAJO-1297: Tajo Web UI does not work after TAJO-1291. (jihoon)
+
+    TAJO-1251: Query is hanging occasionally by shuffle report. (jinho)
+
+    TAJO-1287: Repeated using of the same order by key in multiple 
+    window clauses should be supported. (Keuntae Park)
+
+    TAJO-1265: min(), max() does not handle null properly. (Keuntae Park)
+
+    TAJO-1270: Fix typos. (DaeMyung Kang via hyunsik)
+
+    TAJO-1180: digitValue should throw Exception when char is not in 
+    valid range. (DaeMyung Kang via hyunsik)
+
+    TAJO-1276: Link to tsql guide 404s in tajo cli. (Jakob Homan via jihoon)
+
+    TAJO-1275: Optimizer pushs down non-equi filter as theta join qualifier.
+    (Keuntae Park)
+
+    TAJO-1249: Tajo should check if a file format given in DDL is supported.
+    (DaeMyung Kang via hyunsik)
+ 
+    TAJO-1250: RawFileAppender occasionally causes BufferOverflowException. 
+    (jinho)
+
+    TAJO-1259: A title in catalog configuration document is different from 
+    others. (Jongyoung Park via hyunsik)
+
+    TAJO-1232: Implicit groupby queries with LIMIT lead to wrong results. 
+    (jihoon)
+
+    TAJO-1254: Fix getProgress race conditions in Query. (jinho)
+
+    TAJO-1252: PathValidator should allow hdfs paths which contain IP addresses. 
+    (jihoon)
+
+    TAJO-1246: HBase info port conflict occasionally causes unit test 
+    failures in Jenkins CI. (hyunsik)
+
+    TAJO-1242: Json scanner can not read some case of trucated text. (jinho) 
+
+    TAJO-1239: ORDER BY with null column desc miss some data. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-1244: tajo.worker.tmpdir.locations should use a validator for a list 
+    of paths. (hyunsik)
+
+    TAJO-1235: ByteBufLineReader can not read text line with CRLF.
+    (jinho)
+
+    TAJO-1237: Fix missing maven-module for pullserver. (jinho)
+
+    TAJO-1196: Unit test hangs occasionally and randomly. (jihoon)
+
+    TAJO-1234: Rearrange timezone in date/time types. (hyunsik)
+
+    TAJO-1231: Implicit table properties in session are not stored in 
+    table property. (hyunsik)
+
+    TAJO-1194: 'INSERT OVERWRITE .. SELECT' does not remove existing data 
+    when result is empty. (jaehwa)
+
+    TAJO-1191: Change DateDatum timezone to UTC. (Jaewoong Jung via hyunsik)
+
+    TAJO-1224: When there is no projected column, json scan can be hang. 
+    (hyunsik) 
+
+    TAJO-1220: Implement createStatement() and setEscapeProcessing() in 
+    JdbcConnection. (YeonSu Han via hyunsik)
+
+    TAJO-1183: Keep command execution even with errors. (Jaewoong Jung via 
+    hyunsik)
+
+    TAJO-1190: INSERT INTO to partition tables may cause NPE. (hyunsik)
+
+    TAJO-1211: Staging directory for CTAS and INSERT should be in 
+    the output dir. (hyunsik)
+
+    TAJO-1210: ByteBufLineReader does not handle the end of file, 
+    if newline is not appeared. (jinho)
+
+    TAJO-1119: JDBC driver should support TIMESTAMP type. (jaehwa)
+
+    TAJO-1166: S3 related storage causes compilation error in Hadoop 
+    2.6.0-SNAPSHOT. (jaehwa)
+
+    TAJO-1208: Failure of create table using textfile on hivemeta.
+    (jinho)
+
+    TAJO-1205: Remove possible memory leak in TajoMaster. (jinho)
+
+    TAJO-1181: Avro schema URL should support various protocols. 
+    (jinho)
+
+    TAJO-1200: Invalid shuffle data of multiple worker in same server.
+    (jinho)
+
+    TAJO-1197: Unit test failed: unable to create new native thread.
+    (jinho)
+
+    TAJO-1178: Some error messages for wrong JSON queries are not so 
+    much helpful. (Jaewoong Jung via jihoon)
+    
+    TAJO-1162: to_char() returns "-00" second. (Hyoungjun Kim)
+
+    TAJO-1154: TajoCli doesn't pause while running the non-forwarded 
+    query. (Hyoungjun Kim via hyunsik)
+
+    TAJO-1150: Some weird methods in QueryClientImpl should be fixed. 
+    (Jongyoung Park via hyunsik)
+
+    TAJO-1139: ExternalSortExec should delete the intermediate files. 
+    (jinho via hyunsik)
+
+    TAJO-1126: Join condition including functions throws 
+    IllegalArgumentException. (hyunsik)
+
+    TAJO-1179: Integration tests in TravisCI are occasionally failed 
+    due to log size. (hyunsik)
+
+
+  TASKS
+
+    TAJO-1260: Add ALTER TABLE ADD/DROP PARTITION statement to parser. (jaehwa)
+
+    TAJO-1323: Cleanup the unstable test case. (jinho)
+
+    TAJO-1295: Remove legacy worker.dataserver package and its unit tests.
+    (hyunsik)
+
+    TAJO-1296: Remove obsolete classes from tajo.master.container package.
+    (hyunsik)
+
+    TAJO-1294: Add index documents. (jihoon)
+
+    TAJO-1280: Update the roles of Hyoungjun and Jihun in web site.
+    (hyunsik)
+
+    TAJO-1274: Merge separate pages of getting started document into a single 
+    page. (hyunsik)
+
+    TAJO-967: tajoCli doesn't remeber the last '\q' command.
+    (Jaewoong Jung via jihoon)
+
+    TAJO-1272: Change snapshot version from 0.9.1 to 0.10. (hyunsik)
+
+    TAJO-1267: Remove LazyTaskScheduler. (DaeMyung Kang via jihoon)
+
+    TAJO-1233: Merge hbase_storage branch to the master branch. 
+    (Hyoungjun via hyunsik)
+ 
+    TAJO-1229: rename tajo-yarn-pullserver to tajo-pullserver.
+    (hyunsik)
+
+    TAJO-1157: Required Java version in tutorial doc needs to be updated.
+    (hyunsik)
+
+    TAJO-1129: Remove hadoop 2.2.0 support. (jinho via hyunsik)
+
+    TAJO-1153: Merge off-heap package in block_iteration branch to master 
+    branch. (hyunsik)
+
+    TAJO-1032: Improve TravisCI scripts to adjust log4j log level. (jinho)
+
+    TAJO-1141: Refactor the packages hierarchy of tajo-client. (hyunsik)
+
+
+  SUB TASKS
+
+    TAJO-1262: Rename the prefix 'SubQuery' to 'Stage'. (hyunsik)
+
+    TAJO-324: Rename the prefix 'QueryUnit' to Task. (hyunsik)
+
+    TAJO-1151: Implement the ByteBuffer-based De/Serializer. (jinho)
+
+    TAJO-1152: RawFile ByteBuffer should be reuse. (jinho)
+
+    TAJO-1149: Implement direct read of DelimitedTextFile. (jinho)
+
+
+
+Release 0.9.0
+
+  NEW FEATURES 
+
+    TAJO-1105: Add thread which detects JVM pauses like HADOOP's. (jinho)
+
+    TAJO-704: TajoMaster HA (jaehwa)
+
+    TAJO-20: INSERT INTO ... SELECT. (Hyoungjun Kim via hyunsik)
+
+    TAJO-774: Implement logical plan part and physical executor for window 
+    function. (hyunsik)
+
+    TAJO-847: Supporting MariaDB-based Store, which is compatible with MySQL.
+    (Jinhang Choi via jihoon)
+
+    TAJO-860: Implements TRUNCATE table. (Hyoungjun Kim via hyunsik)
+
+    TAJO-849: Add Parquet storage to HCatalogStore. (jaehwa)
+
+    TAJO-494: Extend TajoClient to run a query with a plan context serialized 
+    as the JSON form. (jihoon)
+
+    TAJO-761: Implements INTERVAL type. (Hyoungjun Kim via hyunsik)
+
+    TAJO-790: Implements ADD_MONTHS() function. (Hyoungjun Kim via hyunsik)
+
+    TAJO-791: Implements ADD_DAYS() function. (Hyoungjun Kim via hyunsik)
+
+    TAJO-762: Implements current date/time function (Hyoungjun Kim via hyunsik)
+
+  IMPROVEMENT
+
+    TAJO-1110: JAVA_PULLSERVER_HEAP_MAX in bin/tajo should be increased.
+    (hyunsik)
+
+    TAJO-1010: Improve multiple DISTINCT aggregation. (Hyoungjun Kim and jaehwa)
+
+    TAJO-1093: DateTimeFormat.to_char() is slower than SimpleDateFormat.format().
+    (Jihun Kang via hyunsik)
+
+    TAJO-1030: Not supported JDBC APIs should return empty results instead of 
+    Exception. (Hyoungjun Kim via hyunsik)
+
+    TAJO-983: Worker should directly read Intermediate data stored in localhost
+    rather than fetching. (Mai Hai Thanh via hyunsik)
+
+    TAJO-910: Simple query (non-forwarded query) should be supported against 
+    partition tables. (Hyoungjun Kim)
+
+    TAJO-1035: Add default TAJO_PULLSERVER_HEAPSIZE. (Hyoungjun Kim)
+
+    TAJO-1049: Remove the parallel degree limit up to the maximum cluster 
+    capacity. (hyunsik)
+
+    TAJO-1046: Remove hadoop native dependency of pullserver. (jinho)
+
+    TAJO-1040: Misuse netty HashedWheelTimer. (jinho)
+
+    TAJO-1034: Reduce Explicit Use of JVM Internal Class. 
+    (Jihun Kang via hyunsik)
+
+    TAJO-1027: Upgrade Hive to 0.13.0 and 0.13.1. (jaehwa)
+
+    TAJO-1028: JDBC should support SET command.(Hyoungjun Kim)
+
+    TAJO-937: Should use tajo.util.VersionInfo instead of 
+    TajoConstants.TAJO_VERSION. (Mai Hai Thanh via hyunsik)
+
+    TAJO-991: Running PullServer on a dedicated JVM process which separates 
+    from worker. (Hyoungjun Kim)
+
+    TAJO-906: Runtime code generation for evaluating expression trees.
+    (hyunsik)
+
+    TAJO-931: Output file can be punctuated depending on the file size.
+    (hyunsik)
+
+    TAJO-992: Reduce number of hash shuffle output file.(Hyoungjun Kim)
+
+    TAJO-1008: Protocol buffer De/Serialization for EvalNode. (hyunsik)
+
+    TAJO-984: Improve the default data type handling in RowStoreUtil.
+    (jihoon via hyunsik)
+
+    TAJO-895: ConstEval should not be included in target list of projectable 
+    nodes. (hyunsik)
+
+    TAJO-928: Session variables should override query configs in TajoConf.
+    (hyunsik)
+
+    TAJO-989: Cleanup of child blocks after parent execution block is complete
+    (jinho)
+
+    TAJO-966: Range partition should support split of multiple characters.
+    (hyunsik)
+
+    TAJO-987: Hash shuffle should be balanced according to intermediate
+    volumes. (hyunsik)
+
+    TAJO-955: Add database selection submit button in catalogview.jsp for text
+    based browse. (Hyoungjun Kim via jihoon)
+
+    TAJO-956: CONCAT should be support multiple params and null param.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-953: RawFile should release a DirectBuffer immediately. (jinho)
+
+    TAJO-933: Fork some classes of Parquet as builtin third-party classes.
+    (hyunsik)
+
+    TAJO-932: Upgrade Parquet to 1.5.0. (hyunsik)
+
+    TAJO-903: Some left outer join cases are not optimized as the broadcast 
+    join. (Hyoungjun Kim via hyunsik)
+
+    TAJO-911: Refactoring Mysql/Maria Catalog Store. (DaeMyung Kang via hyunsik)
+
+    TAJO-853: Refactoring FilterPushDown for OUTER JOIN.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-840: Improve query result print with counting empty table. (jaehwa)
+
+    TAJO-844: JDBC should be support getTime, getDate, and getTimestamp. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-843: implements COALESCE for BOOLEAN, DATE, TIME, TIMESTAMP. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-854: Supports INSERT INTO with UNION. (Hyoungjun Kim via jihoon) 
+
+    TAJO-793: CLI should be able to exit when single query is failed.
+    (Hyoungjun Kim via jinho)
+
+    TAJO-846: Clean up the task history in woker. (jinho)
+
+    TAJO-842: NULL handling in JDBC. (Hyoungjun Kim via jinho)
+
+    TAJO-699: Create a table using LIKE. (Prafulla T via hyunsik)
+
+    TAJO-825: Datetime type refactoring. (Hyoungjun Kim via jihoon)
+
+    TAJO-811: add simple fifo scheduler support. (jinho)
+
+    TAJO-801: Multiple distinct should be supported. (Hyoungjun Kim via hyunsik)
+
+    TAJO-807: Implement Round(numeric, int) function.
+    (Seungun Choe via hyunsik)
+
+    TAJO-797: Implicit type conversion support. (hyunsik)
+
+    TAJO-804: Bump up Parquet version to 1.4.2. (hyunsik)
+
+    TAJO-425: RAWFILE_SYNC_INTERVAL has not default value. (jinho)
+
+    TAJO-617: Rename BIN/tajo_dump BIN/tajo-dump. (jinho)
+
+    TAJO-789: Improve shuffle URI. (jinho)
+
+    TAJO-769: A minor improvements for HCatalogStore (Fengdong Yu via hyunsik)
+
+    TAJO-734: Arrange TajoCli output message. (hyoungjunkim via jihoon)
+
+    TAJO-758: Supports parameter values in the SQL file.
+    (Hyoungjun Kim via hyunsik)
+
+  BUG FIXES
+
+    TAJO-1113: SubQuery in KILLED state should handle unexpected events.
+    (hyunsik)
+
+    TAJO-1111: TestKillQuery.testKillQueryFromInitState occasionally fails.
+    (hyunsik)
+
+    TAJO-1107: Broadcast join on non-leaf node scans only first data file.
+    (Hyoungjun Kim)
+
+    TAJO-1106: Missing session check in getFinishedQuery API. 
+    (Yongjun Park via hyunsik)
+
+    TAJO-1021: Remove the member variable Builder from all classes inherited 
+    from ProtoObject. (hyunsik)
+
+    TAJO-1104: Using asterisk with GROUP BY causes NPE. (hyunsik)
+
+    TAJO-1099: LogicalPlanner::convertDataType causes NPE in some cases.
+    (hyunsik)
+
+    TAJO-1102: Self-join with a partitioned table returns wrong result data.
+    (Hyoungjun Kim)
+
+    TAJO-1097: IllegalArgumentException: RawFileScanner. (Mai Hai Thanh via 
+    jinho)
+
+    TAJO-1103: Insert clause of partitioned table loses some FetchImpls. (jinho)
+
+    TAJO-1101: Broadcast join with a zero-length file table returns wrong 
+    result data. (Hyoungjun Kim)
+
+    TAJO-1067: INSERT OVERWRITE INTO should not remove all partitions. (jaehwa)
+
+    TAJO-1065: The \admin -cluster argument doesn't run as expected.
+    (Jongyoung Park via hyunsik)
+
+    TAJO-1072: CLI gets stuck when wrong host/port is provided. 
+    (Jihun Kang via hyunsik)
+
+    TAJO-1081: Non-forwarded (simple) query shows wrong rows. (hyunsik)
+
+    TAJO-981: Help command (\?) in tsql takes too long time. (YeonSu Han via 
+    jaehwa)
+
+    TAJO-962: Column reference used in LIMIT clause incurs NPE.
+
+    TAJO-1074: Query calculates wrong progress before subquery init. (jinho)
+
+    TAJO-1025: Network disconnection during query processing can cause 
+    infinite exceptions. (Jihun Kang via jinho)
+
+    TAJO-1047: DefaultTaskScheduler:allocateRackTask is failed occasionally
+    on JDK 1.7. (jinho)
+
+    TAJO-1056: Wrong resource release or wrong task scheduling. (jinho)
+
+    TAJO-1050: RPC client does not retry during connecting. 
+    (Jihun Kang via jinho)
+
+    TAJO-948: 'INSERT INTO' statement to non existence table casuses 
+    NPE. (Jongyoung Park via hyunsik)
+
+    TAJO-1048: Missed use of session variables in GlobalPlanner.
+    (hyunsik)
+
+    TAJO-1037: KillQuery hang in subquery init state. (jinho)
+
+    TAJO-1024: RpcConnectionPool::getConnection can cause NPE at 
+    initialization. (hyunsik)
+
+    TAJO-1038: Remove use of Builder variable in Schema. (hyunsik)
+
+    TAJO-1022: tsql does not work as background process(Hyoungjun Kim)
+
+    TAJO-1029: TAJO_PULLSERVER_STANDALONE should be false in default tajo-env.sh
+    (jinho)
+
+    TAJO-1017: TajoConf misuses read & write locks in some functions. 
+    (Mai Hai Thanh via hyunsik)
+
+    TAJO-1020: TajoContainerProxy::assignExecutionBlock causes NPE by race.
+    (hyunsik)
+
+    TAJO-986: Task scheduler gets incorrect task size. (Mai Hai Thanh via jihoon)
+
+    TAJO-873: Query status is still RUNNING after session expired.
+    (Hyoungjun Kim, jinho)
+
+    TAJO-1004: UniformRangePartition cannot deal with unicode ranges.
+    (hyunsik)
+
+    TAJO-1013: A complex equality condition including columns of the same
+    table is recognized as a join condition. (hyunsik)
+
+    TAJO-1011: EvalTreeUtil::isJoinQual need to handle other join conditions.
+    (jaehwa)
+
+    TAJO-1009: A binary eval for column references of the same tables 
+    should not be recognized as a join condition. (hyunsik)
+
+    TAJO-985: Client API should be non-blocking. (jinho)
+
+    TAJO-1006: Fix wrong storage unit for kilo bytes and others. (hyunsik)
+
+    TAJO-1000: TextDatum.asChar() is incorrect, if client charset is different.
+    (jinho)
+
+    TAJO-995: HiveMetaStoreClient wrapper should retry the connection. (jinho)
+
+    TAJO-947: ColPartitionStoreExec can cause URISyntaxException due 
+    to special characters. (Mai Hai Thanh via hyunsik)
+
+    TAJO-999: SequenceFile key class need to be compatible. (jaehwa)
+
+    TAJO-994: 'count(distinct x)' function counts first null value. (hyunsik)
+
+    TAJO-996: Sometimes, scheduleFetchesByEvenDistributedVolumes loses
+    some FetchImpls. (hyunsik)
+
+    TAJO-949: PullServer does not release files, when a channel throws 
+    an internal exception. (jinho)
+    
+    TAJO-975: alias name which is the same to existing column name may cause
+    NPE during PPD. (hyunsik)
+
+    TAJO-979: Dividing float value by zero should throw "Divide by zero
+    Exception" (Hyoungjun Kim via hyunsik)
+
+    TAJO-978: RoundFloat8 should return Float8Datum type. (Hyoungjun Kim via 
+    hyunsik)
+
+    TAJO-957: ROUND should be support INT parameter. (Mai Hai Thanh via hyunsik)
+
+    TAJO-980: execution page in Web UI broken. (hyunsik)
+
+    TAJO-952: Wrong default partition volume config. (Mai Hai Thanh via jihoon)
+
+    TAJO-974: Eliminate unexpected case condition in SubQuery. (Hyoungjun Kim 
+    via hyunsik) 
+
+    TAJO-977: INSERT into a partitioned table as SELECT statement uses a wrong 
+    schema. (Hyoungjun Kim via hyunsik)
+
+    TAJO-968: Self-Join query (including partitioned table) doesn't run 
+    unexpectedly using auto broadcast join. (jaewha)
+
+    TAJO-914: join queries with constant values can cause schema mismatch in
+    logical plan. (hyunsik)
+
+    TAJO-969: Distributed sort on a large data set may result in incorrect
+    results. (hyunsik)
+
+    TAJO-972: Broadcast join with left outer join returns duplicated rows.
+    (Hyoungjun Kim via jaehwa)
+
+    TAJO-666: java.nio.BufferOverflowException occurs when the query includes 
+    an order by clause on a TEXT column. (Mai Hai Thanh via jihoon)
+
+    TAJO-939: Refactoring the column resolver in LogicalPlan. (hyunsik)
+
+    TAJO-965: Upgrade Bytes class and move some methods to others. (hyunsik)
+
+    TAJO-961: TajoCli should exit when at least one query faces error while
+    executing a SQL script. (hyunsik)
+
+    TAJO-960: TajoCli's problem does not show the current status. (hyunsik)
+
+    TAJO-945: Connecting to Tajo by JDBC driver failed with SQL Exception 
+    "Invalid JDBC URI". (Mai Hai Thanh via jihoon)
+
+    TAJO-904: ORDER BY Null first support. (Hyoungjun Kim via hyunsik)
+
+    TAJO-936: TestStorages::testSplitable is failed occasionally. (jinho)
+
+    TAJO-673: Assign proper number of tasks when inserting into partitioned table. (jaehwa)
+
+    TAJO-916: SubQuery::computeStatFromTasks occasionally fail.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-869: Sometimes, the unit test of testTaskRunnerHistory is failed.
+    (jinho)
+
+    TAJO-908: Fetcher does not retry, when pull server connection was closed.
+    (jinho)
+ 
+    TAJO-926: Join condition including column references of a row-preserving
+    table in left outer join causes incorrect result. (hyunsik)
+
+    TAJO-852: Integration test using HCatalog as a catalog store is failed.
+    (jinho)
+
+    TAJO-934: Multiple DISTINCT returns null grouping key value.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-929: Broadcast join with empty outer join table returns empty result.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-927: Broadcast Join with Large, Small, Large, Small tables
+    makes a wrong plan. (Hyoungjun Kim via hyunsik)
+
+    TAJO-913: Add some missed tests for constant value group-by keys. 
+    (hyunsik)
+
+    TAJO-909: {SortBased, Col}PartitionStoreExec should not write partition 
+    keys to files. (Hyoungjun Kim via hyunsik)
+
+    TAJO-912: Tsql prints wrong version. (Mai Hai Thanh via hyunsik)
+
+    TAJO-925: Child ExecutionBlock of JOIN node has different number of 
+    shuffle keys. (Hyoungjun Kim via hyunsik)
+
+    TAJO-902: Unicode delimiter does not work correctly. (jinho)
+
+    TAJO-905: When to_date() parses some date without day, the result will be 
+    wrong. (hyunsik)
+
+    TAJO-898: Left outer join with union returns empty result. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-897: PartitionedTableRewriter is repeated several times with same 
+    table. (Hyoungjun Kim via hyunsik)
+
+    TAJO-891: Complex join conditions with UNION or inline should be supported.
+    (hyunsik)
+    
+    TAJO-899: Nested now() has different value for each task. (Hyoungjun Kim 
+    via hyunsik)
+
+    TAJO-894: Left outer join with partitioned large table and small table 
+    returns empty result. (Hyoungjun Kim via hyunsik)
+
+    TAJO-867: OUTER JOIN with empty result subquery produces a wrong result.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-881: JOIN with union query occurs NPE. (Hyoungjun Kim via hyunsik)
+
+    TAJO-884: complex join conditions should be supported in ON clause.
+    (hyunsik)
+
+    TAJO-874: Sometimes InvalidOperationException occurs when aggregates
+    TableStat. (Hyoungjun Kim via hyunsik) 
+
+    TAJO-866: COUNT DISTINCT with other aggregation function throws
+    ClassCastException. (Hyoungjun Kim via hyunsik)
+
+    TAJO-882: CLI hangs when a error occurs in the GlobalPlanner.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-850: OUTER JOIN does not properly handle a NULL.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-879: Some data is missing in the case of BROADCAST JOIN and
+    multi-column partition. (Hyoungjun Kim via jaehwa)
+
+    TAJO-848: PreLogicalPlanVerifier::visitInsert need to find smaller
+    expressions than target columns for a partitioned table. (jaehwa)
+
+    TAJO-880: NULL in CASE clause occurs Exception. (Hyoungjun Kim via hyunsik)
+
+    TAJO-862: Restore failure of dumped relations. (jihoon)
+
+    TAJO-861: tajo-dump script are not executable. (jinho)
+
+    TAJO-839: If all tables participate in the BROADCAST JOIN, there is some 
+    missing data. (Hyoungjun Kim via jihoon)
+
+    TAJO-868: TestDateTimeFunctions unit test is occasionally failed. (hyunsik)
+
+    TAJO-863: Column order mismatched in the JOIN query with asterisk selection. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-851: Timestamp type test of TestSQLExpression::testCastFromTable fails 
+    in jenkins CI test. (Hyoungjun Kim via hyunsik)
+
+    TAJO-830: Some filter conditions with a SUBQUERY are removed by optimizer.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-819: KillQuery does not work for running query on TajoWorker. (jaehwa)
+
+    TAJO-808: Fix pre-commit build failure. (jinho)
+ 
+    TAJO-827: SUM() overflow in the case of INT4. (Hyoungjun Kim via hyunsik)
+
+    TAJO-832: NPE occurs when Exception's message is null in Task. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-833: NPE occurs when using the column as a alias name in the multiple 
+    DISTINCT. (Hyoungjun Kim via hyunsik)
+
+    TAJO-821: IllegalStateException occurs when a NettyClientBase object is created 
+    within single thread. (hyoungjunkim via jinho)
+
+    TAJO-816: NULL delimiter doesn't apply with HCatalogStore. (jaehwa)
+
+    TAJO-823: Missing INET4 handling in DatumFactory.cast(). (jihoon)
+
+    TAJO-803: INSERT INTO without FROM throws ClassCastException.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-813: CLI should support comment character with multi-line query.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-800: CLI's meta command should be aware "TABLE_NAME" style. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-795: PlannerUtil::joinJoinKeyForEachTable need to handle theta-join.
+    (jaehwa)
+
+    TAJO-792: Insert table error with database name. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-806: CreateTableNode in CTAS uses a wrong schema as output schema and 
+    table schema. (hyunsik)
+
+    TAJO-805: Multiple constant in selection emits some columns. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-799: Local query without FROM throws IllegalArgumentException in 
+    CLI. (Hyoungjun Kim via hyunsik)
+
+    TAJO-802: No partition columns in WEB catalog page. 
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-766: Test failures in TestExecExternalShellCommand. (jihoon)
+
+  TASKS
+
+    TAJO-668: Add datetime function documentation. (Jongyoung Park via hyunsik)
+
+    TAJO-1077: Add Derby configuration documentation. (hyunsik)
+
+    TAJO-1068: Add SQL Query documentation. (hyunsik)
+
+    TAJO-1078: Update contributor list. (hyunsik)
+
+    TAJO-1070: BSTIndexScanExec should not seek a negative offset. (jinho)
+
+    TAJO-1054: Wrong comment in ByteUtils.splitWorker(). 
+    (Jongyoung Park via jinho)
+
+    TAJO-1007: Update site for new committer and new contributors. 
+    (hyunsik)
+
+    TAJO-1001: Add missed postgresql license to NOTICE.txt and LICENSE.txt.
+    (hyunsik)
+
+    TAJO-890: Redirect stdout of maven test to /dev/null in Travis CI 
+    script. (hyunsik)
+
+    TAJO-887: Eliminate HiveQL support feature. (hyunsik)
+
+    TAJO-886: Add IRC page to community section in site. (hyunsik)
+
+    TAJO-859: Update site for new committer Alvin Henrick. (hyunsik)
+
+    TAJO-817: tajo-core should not skip deploy. (hyunsik)
+
+    TAJO-814: Set up Travis CI builds. (hyunsik)
+
+    TAJO-820: Add missing license header to 0.8.0 release announcement. 
+    (hyunsik)    
+
+    TAJO-810: TAJO-810: Update Tajo site for 0.8.0 release. (hyunsik)
+
+    TAJO-605: Rename Options to KeyValueList. (jinho)
+
+    TAJO-834: Add Travis notification to issues@tajo.a.o and IRC. hyunsik)
+
+  SUB TASKS
+
+    TAJO-1069: TAJO-1069: Add document to explain High Availability support. (jaehwa)
+
+    TAJO-1096: Update download source documentation (Mai Hai Thanh via jaehwa)
+
+    TAJO-1062: Update TSQL documentation. (jaehwa)
+
+    TAJO-1061: TAJO-1061: Update build documentation. (jaehwa)
+
+    TAJO-1060: Apply updated hadoop versions to README and BUILDING files.
+    (jinho)
+
+    TAJO-667: Add math function documentation. (Jongyoung Park via hyunsik)
+
+    TAJO-1016: Refactor worker rpc information. (jinho)
+
+    TAJO-1015: Add executionblock event in worker. (jinho)
+
+    TAJO-783: Remove yarn-related code from tajo-core. (hyunsik)
+
+Release 0.8.0
+
+  NEW FEATURES
+
+    TAJO-711: Add Avro storage support. (David Chen via hyunsik)
+
+    TAJO-746: Implements function COALESCE. (hyoungjunkim via hyunsik)
+
+    TAJO-616: SequenceFile support. (jaehwa)
+
+    TAJO-480: Umbrella Jira for adding ALTER TABLE statement.
+    (Alvin Henrick via hyunsik)
+
+    TAJO-378: Implement concat_ws function. (Seungun Choe via jaehwa)
+
+    TAJO-377: Implement concat function (Seungun Choe via jaehwa)
+
+    TAJO-30: Parquet Integration. (David Chen via hyunsik)
+
+    TAJO-353: Add Database support to Tajo. (hyunsik)
+
+    TAJO-574: Add a sort-based physical executor for column partition store.
+    (hyunsik)
+
+    TAJO-569: Add max(TEXT) function. (hyunsik)
+
+    TAJO-449: Implement extract() function. (Keuntae Park)
+
+    TAJO-482: Implements listing functions and describing a specified
+    function. (hyoungjunkim via hyunsik)
+
+    TAJO-498: Implement digest(text, text) function.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-122: Add EXPLAIN clause to show a logical plan.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-438: Date literal support. (Jae Young Lee via jihoon)
+
+    TAJO-474: Add query admin utility. (DaeMyung Kang via hyunsik)
+
+    TAJO-460: CTAS statement should support partitioned table.
+    (Min Zhou via hyunsik)
+
+    TAJO-381: Implement find_in_set function. (Jae Young Lee via hyunsik)
+
+    TAJO-439: Time literal support. (DaeMyung Kang via jihoon)
+
+    TAJO-437: Timestamp literal support. (hyunsik)
+
+    TAJO-382: Implement encode/decode functions. (Seungun Choe via jihoon)
+
+    TAJO-436: Implement ceiling(FLOAT8) function. (DaeMyung Kang via hyunsik)
+
+    TAJO-338 : Add Query Optimization Part for Column-Partitioned Tables.
+    (hyunsik)
+
+    TAJO-333: Add metric system to Tajo. (hyoungjunkim via jihoon)
+
+    TAJO-413: Implement pi function. (DaeMyung Kang via jihoon)
+
+    TAJO-61: Implement Time Datum Type. (DaeMyung Kang via hyunsik)
+
+    TAJO-60: Implement Date Datum Type. (hyunsik)
+
+    TAJO-400: Implement pow(float8, float8) function. (DaeMyung Kang via jaehwa)
+
+    TAJO-384: to_bin(). (Jae Young Lee via jaehwa)
+   
+    TAJO-62: Implement Timestamp Datum type. (hyunsik)
+
+    TAJO-307: Implement chr(int) function. (DaeMyung Kang via hyunsik)
+
+    TAJO-365: Implement degrees/radians function. (DaeMyung Kang via hyunsik)
+
+    TAJO-368: Implement quote_ident function. (Seungun Choe via hyunsik)
+
+    TAJO-392: Implement cbrt function. (DaeMyung Kang via hyunsik)
+
+    TAJO-394: Implement abs function. (DaeMyung Kang via hyunsik)
+
+    TAJO-395: Implement exp function. (DaeMyung Kang via hyunsik)
+
+    TAJO-396: Implement sqrt function. (DaeMyung Kang via hyunsik)
+
+    TAJO-397: Implement sign function. (DaeMyung Kang via hyunsik)
+
+    TAJO-343: Implement locate function. (KyoungBok Lee via hyunsik)
+
+    TAJO-364: Implement mod/div function. (DaeMyung Kang via jaehwa)
+
+    TAJO-361: Implement rpad function. (Seungun Choe via jaehwa)
+
+    TAJO-359: Implement lpad function. (Seungun Choe via jaehwa)
+
+    TAJO-306: Implement ascii(string) function. (SeongHwa Ahn via jaehwa)
+
+    TAJO-354: Fix invalid type to valid type for udfs(bit_length/char_length).
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-366: Implement trigonometric functions. (Jae Young Lee via jihoon)
+
+    TAJO-358: Implement initcap(string) function. (Seungun Choe via hyunsik)
+
+    TAJO-355: Implement repeat(text,int) function. (DaeMyung Kang via jaehwa)
+
+    TAJO-339: Implement sin( x ) - returns the sine of x (x is in radians). 
+    (Jae Young Lee via jaehwa)
+
+    TAJO-348: Implement octet_length(text). (DaeMyung Kang via jaehwa)
+
+    TAJO-357: Fix invalid filename TestMethFunction to TestMathFUnction.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-352: Implement right/left(text, size) function. 
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-346: Implement hex function. (DaeMyung Kang via hyunsik)
+
+    TAJO-349: Implement md5(text). (DaeMyung Kang via hyunsik)
+
+    TAJO-351: Implement reverse(text). (DaeMyung Kang via hyunsik)
+
+    TAJO-342: Implement strpos(string, substring) function. 
+    (hyoungjunkim via hyunsik)
+
+    TAJO-350: Implement round, floor, ceil. (hyoungjunkim via hyunsik)
+
+    TAJO-207: Implement bit_length(string) function. (DaeMyung Kang via jihoon)
+
+    TAJO-341: Implement substr function. (hyoungjunkim via hyunsik)
+
+    TAJO-308: Implement length(string) function. (hyoungjunkim via hyunsik)
+
+    TAJO-200: RCFile compatible to apache hive. (jinho)
+
+    TAJO-176: Implement Tajo JDBC Driver. (Keuntae Park via jihoon)
+
+    TAJO-16: Enable Tajo catalog to access Hive metastore. (jaehwa)
+
+    TAJO-285: Add CREATE TABLE... BY PARTITION statement to parser. (hyunsik)
+
+    TAJO-267: Implement equals() and deepEquals() functions at LogicalNode.
+    (jihoon)
+
+  IMPROVEMENTS
+
+    TAJO-737: Change version message when daemon starts up. (hyunsik)
+
+    TAJO-768: Improve the log4j configuration. (hyoungjunkim via jinho)
+
+    TAJO-755: ALTER TABLESPACE LOCATION support. (hyunsilk)
+    
+    TAJO-732: Support executing LINUX shell command and HDFS command.
+    (hyoungjun kim via hyunsik)
+
+    TAJO-745: APIs in TajoClient and JDBC should be case sensitive.
+
+    TAJO-743: Change the default resource allocation policy of leaf tasks. (jinho)
+
+    TAJO-717: Improve file splitting for large number of splits. (jinho)
+
+    TAJO-356: Improve TajoClient to directly get query results in the first request.
+    (hyunsik)
+
+    TAJO-728: Supports expression IN statement. (hyunsik)
+
+    TAJO-725: Broadcast JOIN should supports multiple tables. (hyoungjunkim via jaehwa)
+
+    TAJO-735: Remove multiple SLF4J bindings message. (hyoungjunkim via hyunsik)
+
+    TAJO-709: Add .reviewboardrc and use rbt instead of post-review.
+    (David Chen via hyunsik)
+
+    TAJO-714: Enable setting Parquet tuning parameters. (David Chen via hyunsik)
+
+    TAJO-691: HashJoin or HashAggregation is too slow if there is many unique 
+    keys. (hyoungjunkim via hyunsik)
+
+    TAJO-685: Add prerequisite to the document of network functions and 
+    operators. (jihoon)
+
+    TAJO-644: Support quoted identifiers. (hyunsik)
+
+    TAJO-553: Add a method to the TajoClient to get finished query lists.
+    (Ilhyun Suh via jihoon)
+
+    TAJO-670: Change daemon's hostname to canonical hostname 
+    (hyoungjunkim via hyunsik)
+
+    TAJO-638: ExecutionBlock must be sorted by start time in querydetail.jsp.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-589: Add fine grained progress indicator for each task.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-614: Explaining a logical node should use ExplainLogicalPlanVisitor.
+    (hyunsik)
+
+    TAJO-610: Refactor Column class. (hyunsik)
+
+    TAJO-601: Improve distinct aggregation query processing. (hyunsik)
+
+    TAJO-305: Implement killQuery feature. (hyunsik)
+
+    TAJO-598: Refactoring Tajo RPC. (jinho)
+
+    TAJO-592: HCatalogStore should supports RCFile and default hive field 
+    delimiter. (jaehwa)
+
+    TAJO-548: Investigate frequent young gc. (Min Zhou via hyunsik)
+
+    TAJO-584: Improve distributed merge sort. (hyunsik)
+
+    TAJO-36: Improve ExternalSortExec with N-merge sort and final pass
+    omission. (hyunsik)
+
+    TAJO-564: Show execution block's progress in querydetail.jsp.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-569: Add max(TEXT) function. (hyunsik)
+
+    TAJO-497: Rearrange reserved and non-reserved keywords. (sirpkt via hyunsik)
+
+    TAJO-475: Table partition catalog recap. (Min Zhou and hyunsik)
+
+    TAJO-539: Change some EvalNode::eval to directly return a Datum value.
+    (hyunsik)
+
+    TAJO-543: InsertNode and CreateTableNode should play their roles. (hyunsik)
+
+    TAJO-409: Add explored and explained annotations to Tajo function system.
+    (SeongHwa Ahn via hyunsik)
+
+    TAJO-499: Shorten the length of classpath in shell command.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-483: Add getParentCount(), getParents(), getParent() functions to DirectedGraph. 
+    (jihoon)
+
+    TAJO-433: Improve integration with Hive. (jaehwa)
+
+    TAJO-471: Extract ColumnPartitonUtils class for ColumnPartition rewrite.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-476: Add a test development kit for unit tests based on executions
+    of queries. (hyunsik)
+
+    TAJO-464: Rename the name 'partition', actually meaning shuffle to
+    'shuffle'. (hyunsik)
+
+    TAJO-385: Refactoring TaskScheduler to assign multiple fragments. (jihoon)
+
+    TAJO-468: Implements task's detail info page in WEB UI.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-466: Supporting TIME types in DatumFactory.createFromInt8. (DaeMyung Kang via jihoon)
+
+    TAJO-458: Visit methods of LogicalPlanVisitor should take a query block
+    as parameter. (hyunsik)
+
+    TAJO-456: Separate tajo-jdbc and tajo-client from tajo-core-backend. (hyunsik)
+
+    TAJO-432: Add shuffle phase for column-partitioned table store. (Min Zhou via jihoon)
+
+    TAJO-135: Bump up hadoop to 2.2.0. (jihoon)
+
+    TAJO-435: Improve intermediate file. (jinho)
+
+    TAJO-424: Make serializer/deserializer configurable in CSVFile. (jinho)
+
+    TAJO-419: Add missing visitor methods of AlgebraVisitor and
+    BaseAlgebraVisitor. (hyunsik)
+
+    TAJO-421: Improve split for compression file. (jinho)
+
+    TAJO-327: Add testcase to verify TAJO-16. (jaehwa)
+
+    TAJO-405: Improve HCatalogStore to support partitioned table. (jaehwa)
+
+    TAJO-336: Separate catalog stores into separate modules. (jaehwa)
+
+    TAJO-329: Implement physical operator to store in column-partitioned table.
+    (jaehwa)
+
+    TAJO-391: Change the default type of real values from FLOAT4 to FLOAT8 
+    when parsing the user queries. (DaeMyung Kang via jihoon)
+
+    TAJO-304: drop table command should not remove data files in default.
+    (hyunsik)
+
+    TAJO-316: Improve GreedyHeuristicJoinOrderAlgorithm to deal with
+    non-commutative joins. (hyunsik)
+
+    TAJO-371: Increase the default value of worker memory. (jihoon)
+
+    TAJO-284: Add table partitioning entry to Catalog. (jaehwa)
+
+    TAJO-317: Improve TajoResourceManager to support more elaborate resource 
+    management. (Keuntae Park via jihoon)
+
+    TAJO-314: Make TaskScheduler be pluggable. (jihoon)
+
+    TAJO-325: QueryState.NEW and QueryState.INIT should be combined into one
+    state. (Min Zhou via hyunsik)
+
+    TAJO-313: Support deprecated variables in CatalogConstants. (jaehwa)
+
+    TAJO-310: Make the DataLocation class as a separate class and move it to 
+    the tajo-core-storage package. (jihoon)
+
+    TAJO-311: Improve Hive dependency. (jaehwa)
+
+    TAJO-309: Remove unused fields in FileFragment. (jihoon)
+
+    TAJO-297: Rename JDBC variables in CatalogConstants to be more generic. 
+    (jaehwa)
+
+    TAJO-287: Improve Fragment to be more generic. (hyunsik)
+
+    TAJO-274: Maintaining connectivity to Tajo master regardless of the restart
+    of the Tajo master. (Keuntae Park via hyunsik)
+
+    TAJO-287: Refactor TableDesc, TableMeta, and Fragment. (hyunsik)
+
+    TAJO-275: Separating QueryMaster and TaskRunner roles in worker.
+    (Keuntae Park via jihoon)
+
+  BUG FIXES
+
+    TAJO-787: FilterPushDownRule::visitSubQuery does not consider aliased columns. (jaehwa)
+
+    TAJO-786: TajoDataMetaDatabase::getSchemas creates invalid MetaDataTuple.
+    (hyunsik)
+
+    TAJO-652: logical planner cannot handle alias on partition columns.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-675: maximum frame size of frameDecoder should be increased. (jinho)
+
+    TAJO-748: Shuffle output numbers of join may be inconsistent. (jaehwa)
+
+    TAJO-777: Partition column in function parameter occurs NPE.
+    (Hyoungjun Kim via hyunsik)
+
+    TAJO-763: Out of range problem in utc_usec_to(). (Ilhyun Suh via hyunsik)
+
+    TAJO-741: GreedyHeuristicJoinOrderAlgorithm removes some join pairs. (jaehwa)
+
+    TAJO-772: TajoDump cannot dump upper/lower mixed case database names.
+    (hyunsik)
+
+    TAJO-765: Incorrect Configuration Classpaths. (jinho)
+
+    TAJO-563: INSERT OVERWRITE should not remove data before query success.
+    (hyunsik)
+
+    TAJO-738: NPE occur when failed in QueryMaster's GlobalPlanner.build().
+    (hyoungjunkim via hyunsik)
+
+    TAJO-739: A subquery with the same column alias caused planning error.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-729: PreLogicalPlanVerifier verifies distinct aggregation functions
+    incorrectly. (hyunsik)
+
+    TAJO-719: JUnit test failures. (jinho)
+
+    TAJO-713: Missing INET4 in UniformRangePartition. (jihoon)
+
+    TAJO-718: A group-by clause with the same columns but aliased causes
+    planning error. (hyunsik)
+
+    TAJO-679: TimestampDatum, TimeDatum, DateDatum should be able to be
+    compared with NullDatum. (Alvin Henrick via jihoon)
+
+    TAJO-716: Using column names actually aliased in aggregation functions
+    can cause planning error. (hyunsik)
+
+    TAJO-698: Error occurs when FUNCTION and IN statement are used together.
+    (hyunsik)
+
+    TAJO-692: Missing Null handling for INET4 in RowStoreUtil. (jihoon)
+
+    TAJO-712: Fix some bugs after database is supported. (hyunsik)
+
+    TAJO-701: Invalid bytes when creating BlobDatum with offset. (jinho)
+
+    TAJO-708: Test failure after a successful test. (jihoon)
+
+    TAJO-705: CTAS always stores tables with CSV storage type into catalog.
+    (jinho)
+
+    TAJO-693: StatusUpdateTransition in QueryUnitAttempt handles TA_UPDATE 
+    incorrectly. (hyunsik)
+
+    TAJO-687: TajoMaster should pass tajoConf to create catalogServer. 
+    (DaeMyung Kang via jihoon)
+
+    TAJO-690: infinite loop occurs when rack task is assigning. (jinho)
+
+    TAJO-689: NoSuchElementException occurs during assigning the leaf tasks. 
+    (jinho)
+
+    TAJO-651: HcatalogStore should support (de)serialization of RCFile. (jinho)
+
+    TAJO-647: Work unbalance on disk scheduling of DefaultScheduler. (jinho)
+
+    TAJO-612: Missing INET4 type in SQLParser. (jihoon)
+
+    TAJO-672: Wrong progress status when overwrites to partition table.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-663: CREATE TABLE USING RAW doesn't throw ERROR. (jaehwa)
+
+    TAJO-665: sort buffer size must be dealt as long type values. 
+    (hyoungjunkim via hyunsik)
+
+    TAJO-427: Empty table makes IndexOutOfBoundsException at LEFT OUTER JOIN 
+    clause. (jaehwa)
+
+    TAJO-650: Repartitioner::scheduleHashShuffledFetches should adjust the
+    number of tasks. (hyunsik)
+
+    TAJO-648: TajoWorker does not send correct QM rpc and client rpc ports
+    via heartbeat. (hyunsik)
+
+    TAJO-653: RCFileAppender throws IOException. (jinho)
+
+    TAJO-641: NPE in HCatalogStore.addTable(). (jaehwa)
+
+    TAJO-646: TajoClient is blocked while main thread finished.
+    (hyoungjunkim via jinho)
+
+    TAJO-645: Task.Reporter can cause NPE during reporting. (hyunsik)
+
+    TAJO-630: QueryMasterTask never finished when Internal error occurs.
+    (hyunsik)
+
+    TAJO-638: QueryUnitAttempt causes Invalid event error: TA_UPDATE at
+    TA_ASSIGNED. (hyunsik)
+
+    TAJO-640: In inner join clause, empty table can cause a error by order-by
+    clause. (jaehwa)
+
+    TAJO-635: Improve tests of query semantic verification. (hyunsik)
+
+    TAJO-620: A join query can cause IndexOutOfBoundsException if one of
+    tables is empty. (jaehwa)
+
+    TAJO-628: The second stage of distinct aggregation can be scheduled to
+    only one node. (hyunsik)
+
+    TAJO-619: SELECT count(1) after joins on text keys causes wrong plans.
+    (hyunsik)
+
+    TAJO-403: HiveQLAnalyzer should supports standard function in the GROUP BY
+    Clause. (jaehwa)
+
+    TAJO-594: MySQL store doesn't work. (Yongjun Park via jaehwa)
+
+    TAJO-590: Rename HiveConverter to HiveQLAnalyzer. (jaehwa)
+
+    TAJO-575: Worker's env.jsp has wrong URL which go to worker's index.jsp.
+    (hyoungjunkim via jaehwa)
+
+    TAJO-609: PlannerUtil::getRelationLineage ignores PartitionedTableScanNode.
+    (hyunsik)
+
+    TAJO-606: Statemachine visualization fails. (Min Zhou via hyunsik)
+
+    TAJO-595: The same expressions without different alias are not allowed.
+    (hyunsik)
+
+    TAJO-554: LogicalPlanner should allow additional expressions with asterisk
+    in select list. (jihoon)
+
+    TAJO-593: outer groupby and groupby in derived table causes only one
+    shuffle output number. (hyunsik)
+
+    TAJO-583: Broadcast join does not work on partitioned tables. (hyunsik)
+
+    TAJO-588: In some case, leaf task of DefaultTaskScheduler are not
+    distributed execution. (jinho)
+
+    TAJO-586: containFunction shouldn't throw NoSuchFunctionException. (jinho)
+
+    TAJO-582: Invalid split calculation. (jinho)
+
+    TAJO-581: Inline view on column partitioned table causes NPE. (hyunsik)
+
+    TAJO-577: Support S3FileSystem split. (Yongjun Park via jihoon)
+
+    TAJO-568: Union query with the same alias names cause NPE. (hyunsik)
+
+    TAJO-570: InvalidOperationException in outer join with constant values.
+    (hyunsik)
+
+    TAJO-506: RawFile cannot support DATE type. (jinho)
+
+    TAJO-566: BIN/TAJO_DUMP makes wrong ddl script. (hyoungjunkim via hyunsik)
+
+    TAJO-567: Expression projection bugs. (hyunsik)
+
+    TAJO-565: FilterPushDown rewrite rule does not push filters on
+    partitioned scans. (hyunsik)
+
+    TAJO-560: CTAS PARTITION BY with UNION can cause invalid global plan.
+    (hyunsik)
+
+    TAJO-558: HCatalogStore can't scan columns. (jaehwa)
+
+    TAJO-556: java.lang.NoSuchFieldError: IS_SECURITY_ENABLED. (jaehwa)
+
+    TAJO-372: When an exception except for network issues occurs, the
+    operation should not be repeated. (hyunsik)
+
+    TAJO-552: Fix Bug verify-protocbuf.sh runs with bash.
+    (DaeMyung Kang via jihoon)
+
+    TAJO-551: Fix bug getFunction can get wrong function that have invalid 
+    parameters. (DaeMyung Kang via jihoon)
+
+    TAJO-544: Thread pool abusing. (Min Zhou via hyunsik)
+
+    TAJO-493: maven pom.xml should enforce protobuf 2.5. (jaehwa)
+
+    TAJO-360: If there is no matched function, catalog causes NPE.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-537: After TAJO-522, still OutOfMemoryError: unable to create new
+    native thread. (Min Zhou  via hyunsik)
+
+    TAJO-522: OutOfMemoryError: unable to create new native thread.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-518: tajo-algebra and ProjectionPushDownRule code cleanup. (hyunsik)
+
+    TAJO-503: HCatalogStore can't scan several hive databases. (jaehwa)
+
+    TAJO-502: Jenkins build is failing. (jinho)
+
+    TAJO-485: 'CREATE TABLE AS' does not work properly with partition. (jinho)
+
+    TAJO-488: Data fetcher doesn't close small file in shuffle. (jinho)
+
+    TAJO-496: java.lang.NoSuchFieldError: IS_SECURITY_ENABLED when debugging
+    tajo. (Min Zhou via hyunsik)
+
+    TAJO-490: Tajo can't use 'dfs.nameservices' based on namenode ha mode. 
+    (jaehwa)
+
+    TAJO-477: Rename killQuery of QMClientProtocol to closeQuery. (hyunsik)
+
+    TAJO-484: Fix bug [: !=: unary operator expected when execute start-tajo.sh.
+    (DaeMyung Kang via jihoon)
+
+    TAJO-479: Rename obsolete name 'partition' to 'shuffle and fix the broken
+    taskdetail.jsp. (hyunsik).
+
+    TAJO-470: Fetcher's finished time and file length is changed in WEB UI.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-469: CTAS with no column definition will get  a NPE.
+    (Min Zhou via hyunsik)
+
+    TAJO-467: Too many open FD when master failed. (hyoungjunkim via hyunsik)
+
+    TAJO-455: Throw PlanningException when Creating table with Partition
+    exception COLUMN. (DaeMyung Kang via hyunsik)
+
+    TAJO-452: Timstamp literal with fractional seconds results in 
+    java.lang.ArrayIndexOutOfBoundsException. (Keuntae Park via hyunsik)
+
+    TAJO-454: pass invalid argument to DateTime constructor in LogicalPlanner.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-451: Update documentation and version constant for Tajo 0.8.
+    (hyunsik)
+
+    TAJO-448: Timestamp should be based on unixtime. (hyunsik)
+    
+    TAJO-450: Incorrect inet4datum comparison. (jinho)
+
+    TAJO-182: Comparison of primitive values including null value should
+    return NULL. (hyunsik)
+
+    TAJO-431: HCatalogStore can't write any data using INSERT OVERWRITE clause.
+    (jaehwa)
+
+    TAJO-442: Cast operator with nested functions causes NPE. (hyunsik)
+
+    TAJO-426: HCatalogStore created partitions automatically. (jaehwa)
+
+    TAJO-418: sort operator after inline views consisting of unions can cause 
+    an incorrect distributed plan. (hyunsik)
+
+    TAJO-417: TestSQLExpression.testCastFromTable causes unit test failure.
+    (hyunsik)
+
+    TAJO-415: Some complex queries causes NPE and unlimited recursions.
+    (hyunsik)
+
+    TAJO-414: Fix bug of bit operations in decode() method of DateDatum class.
+    (Keuntae Park via jihoon)
+
+    TAJO-407: PostgreSQL-style cast should be higher operator priority.
+    (hyunsik)
+
+    TAJO-411: Fix Bug: createFromInt8's DATE type should be TIMESTAMP.
+    (DaeMyung Kang via jihoon)
+
+    TAJO-390: Queries on history are expired earlier than a given expiry time.
+    (hyoungjunkim via hyunsik)
+
+    TAJO-410: A query with a combination of general and distinct aggregation
+    functions fails. (hyunsik)
+
+    TAJO-404: Tajo does not recognize boolean literal. (hyunsik)
+
+    TAJO-344: Tajo cannot recognize negative numeric expressions. (hyunsik)
+
+    TAJO-393: Unit tests must use test-data directory. (hyunsik)
+
+    TAJO-388: limit clause does not work properly. (hyunsik)
+
+    TAJO-389: The LazyTuple does not work when number format exception occurs 
+    in text deserializer. (jinho)
+
+    TAJO-387: Query is hanging when errors occurs in Query or SubQuery class.
+    (hyunsik)
+
+    TAJO-268: Temporal files should be removed after query is finished. (jinho)
+
+    TAJO-292: Too many intermediate partition files. (jinho)
+
+    TAJO-375: TajoClient can't get result data when different os user
+    (hyoungjunkim via hyunsik)
+
+    TAJO-347: Fix bug when to call function with insensitive function name.
+    (DaeMyung Kang via hyunsik)
+
+    TAJO-345: MergeScanner should support projectable storages. (jihoon)
+
+    TAJO-290: TajoDataType.Type.NULL should be NULL_TYPE. (DaeMyung Kang via 
+    jinho)
+
+    TAJO-332: Invalid row count of CSVScanner. (jinho)
+
+    TAJO-326: In ExecutionBlock, isRoot() and isLeafBlock() return invalid 
+    values. (jihoon)
+
+    TAJO-296: Late registration of Tajo workers. (hyoungjunkim via hyunsik)
+
+    TAJO-321: Invalid split file of compressed text file. (jinho)
+
+    TAJO-295: ConcurrentModificationException in TaskScheduler. (jinho)
+
+    TAJO-293: querymasters directory not found in single node setup. (hyunsik)
+
+  TASKS
+
+    TAJO-517: Publish Tajo jar to a public maven repository. (hyunsik)
+
+    TAJO-788: Update Tajo documentation and README, and BUILDING. (hyunsik)
+
+    TAJO-752: Escalate sub modules in tajo-core into the top-level modules.
+    (hyunsik)
+
+    TAJO-753: Clean up of maven dependencies. (jinho)
+
+    TAJO-730: Update Tajo site to reflect graduation. (hyunsik)
+
+    TAJO-529: Fix warnings in tajo-algebra. (jaehwa)
+
+    TAJO-700: Update site, wikis, pom.xml and other resources to point to the 
+    new repository location. (jihoon)
+
+    TAJO-694: Bump up hadoop to 2.3.0. (jinho)
+
+    TAJO-684: Add functions about time. (Alvin Henrick via jihoon)
+
+    TAJO-669: Add cluster setup documentation. (hyunsik)
+
+    TAJO-681: Embed sphinx rtd theme into tajo-docs. (hyunsik)
+
+    TAJO-657: Missing table stat in RCFile. (jinho)
+
+    TAJO-659: Add Tajo JDBC documentation. (hyunsik)
+
+    TAJO-642: Change tajo documentation tool to sphinx. (hyunsik)
+
+    TAJO-632: add intellij idea projects files into git ignore.
+    (Min Zhou via hyunsik)
+
+    TAJO-218: HiveQLAnalyzer has to support cast expression. (jaehwa)
+
+    TAJO-621: Add DOAP file for Tajo. (hyunsik)
+
+    TAJO-622: Add TM mark and navigation links required for TLP project.
+    (hyunsik)
+
+    TAJO-578: Update configuration for tajo-site.xml. (jaehwa)
+
+    TAJO-530: Fix warnings in tajo-catalog. (jaehwa)
+
+    TAJO-532: Fix warnings in tajo-common. (jinho)
+
+    TAJO-520: Move tajo-core-storage to tajo-storage. (jinho)
+
+    TAJO-536: Fix warnings in tajo-core-storage. (jinho)
+
+    TAJO-545: MySQLStore Documentation. (jaehwa)
+
+    TAJO-526: HCatalogStore Documentation. (jaehwa)
+
+    TAJO-535: Fix warnings in tajo-rpc. (jinho)
+
+    TAJO-531: Fix warnings in tajo-client. (jinho)
+
+    TAJO-478: Add request-patch-review.py that helps submitting patches to
+    jira and reviewboard. (hyunsik)
+
+    TAJO-508: Apply findbugs-excludeFilterFile to TajoQA. (jinho)
+
+    TAJO-457: Update committer list and contributor list. (hyunsik)
+
+    TAJO-166: Automatic precommit test using Jenkins. (hyunsik)
+
+    TAJO-322: Documentation by version. (hyunsik)
+
+    TAJO-320: Visualize Tajo statemachine. (Min Zhou via hyunsik)
+
+    TAJO-319: Update homepage and bump tajo version to 0.8. (hyunsik)
+
+  SUB TASKS
+
+    TAJO-215: Catalog should allow compatible types when finding functions.
+    (Alvin Henrick via hyunsik)
+
+    TAJO-736: Add table management documentation. (hyunsik)
+
+    TAJO-602: WorkerResourceManager should be broke down into 3 parts.
+    (hyunsik)
+
+  TEST
+
+    TAJO-686: Integration test aborted. (jinho)
+
+Release 0.2.0
+
+  NEW FEATURES
+
+    TAJO-260: Add between predicate. (hyunsik)
+
+    TAJO-208: Implement char_length(string) function. (hyunsik)
+
+    TAJO-99: Design the interface of join enumeration algorithm. (hyunsik)
+
+    TAJO-179: Support MySQL CatalogStore. (jinho)
+
+    TAJO-147: Implement trim(text), ltrim(text), and rtrim(text) function.
+    (hyunsik)
+
+    TAJO-148: Implement UPPER(text), LOWER(text) function. (hyunsik)
+
+    TAJO-220: Implement catalog dump feature. (hyunsik)
+
+    TAJO-216: Improve FilterPushDownRule and Implement physical operators 
+    for outer join. (camelia_c via hyunsik)
+
+    TAJO-211: Implement regexp_replace function. (hyunsik)
+
+    TAJO-212: Implement type cast expresion. (hyunsik)
+
+    TAJO-206: Implement String concatenation operator (||). (hyunsik)
+
+    TAJO-213: NULL characters in meta of csv table should be supported.
+    (jinho)    
+
+    TAJO-185: Implement split_part function. (hyunsik)
+
+    TAJO-193: Add string pattern matching operators. (hyunsik)
+
+    TAJO-101: HiveQL converter. (jaehwa)
+
+    TAJO-144: Implement INSERT OVERWRITE clause. (hyunsik)
+
+    TAJO-139: TAJO-139: In predicate support. (hyunsik)
+
+    TAJO-134: Support for compression/decompression of CSVFile. (jinho)
+
+    TAJO-59: Implement Char Datum Type. (jihoon)
+   
+    TAJO-96: Design and implement rewrite rule interface and the rewrite rule 
+    engine. (hyunsik)
+
+    TAJO-19: CREATE TABLE without external data should be supported. (jinho)
+
+    TAJO-57: Recognize Parser and Catalog Standard SQL data types. (hyunsik)
+
+    TAJO-33: Implement a basic query progress indicator. (hyunsik)
+
+  IMPROVEMENTS
+
+    TAJO-270: Boolean datum compatible to apache hive. (jinho)
+
+    TAJO-261: Rearrange default port numbers and config names. (hyunsik)
+
+    TAJO-236: Implement LogicalPlanVerifier to check if a logical plan is 
+    valid. (hyunsik)
+
+    TAJO-254: Refactor package names and class names to have proper names.
+    (add a missed changelog)
+
+    TAJO-255: Cleanup exceptions of engine. (hyunsik)
+
+    TAJO-253: Clean up tajo-default.xml in test resource. (hyunsik)
+
+    TAJO-239: Improving web UI. (Keuntae Park via hyunsik)
+
+    TAJO-232: Rename join operators and add other join operators to
+    PhysicalPlanner. (hyunsik)
+
+    TAJO-229: Implement JoinGraph to represent a graph of relation joins.
+    (hyunsik)
+
+    TAJO-223: Maximize disk read bandwidth utilization of StorageManagerV2 by
+    moving Tuple creation role to next(). (Keuntae Park via hyunsik)
+
+    TAJO-199: All relations in catalog must have data volume size. (hyunsik)
+
+    TAJO-224: Rearrange DataType enumeration and Refactor type systems.
+    (hyunsik)
+
+    TAJO-214: System should inquire finished query history after execution 
+    in web. (SeongHwa Ahn via hyunsik)
+
+    TAJO-145: count(distinct column) should be supported. (hyunsik)
+
+    TAJO-197: Implement Enforcer that forces physical planner to choose
+    specified algorithms. (hyunsik)
+
+    TAJO-194: LogicalNode should have an identifier to distinguish each
+    logical node instance. (hyunsik)
+
+    TAJO-183: Creating too many TableMetaProto objects might lead a potential 
+    memory leak. (jihoon)
+
+    TAJO-184: Refactor GlobalPlanner and global plan data structure. (hyunsik)
+
+    TAJO-119: Refactor and Improve Datum. (jinho)
+
+    TAJO-178: Implements StorageManager for scanning asynchronously. 
+    (hyoungjunkim via hyunsik)
+
+    TAJO-167: Implement GeneralSetFunctionExpr to represent all SQL standard
+    set functions. (hyunsik)
+
+    TAJO-149: Eliminate QueryConf and its file write. (hyunsik)
+
+    TAJO-143: Implement hash semi-join operator. (hyunsik)
+
+    TAJO-142: Implement hash anti-join operator. (hyunsik)
+
+    TAJO-94: Remove duplicate proto files. (hyunsik)
+
+    TAJO-141: Set on demand as the default cluster mode. (hyunsik)
+
+    TAJO-136: Broadcast join should be enabled. (hyunsik)
+
+    TAJO-127: Implement Tajo Resource Manager. (hyoungjunkim via hyunsik)
+
+    TAJO-84: Task scheduling with considering disk load balance. (jinho)
+
+    TAJO-123: Clean up the logical plan's json format. (hyunsik)
+
+    TAJO-129: Enable the constructor of NettyServerBase to take a service
+    name. (hyunsik)
+
+    TAJO-91: Launch QueryMaster on NodeManager per query. 
+    (hyoungjunkim via hyunsik)
+
+    TAJO-100: Port the parse error handling to the new parser. (jinho)
+
+    TAJO-121: Add LogicalPlanVisitor and Refactor LogicalOptimizer to use the
+    visitor. (hyunsik)
+
+    TAJO-118: Refactor and Improve text file Scanner. (jinho)
+
+    TAJO-95: Eliminate the lazy copy approach from the classes wrapping
+    protobuf-generated classes. (hyunsik)
+
+    TAJO-102: Add AlgebraVisitor and Refactor LogicalPlanner to use the visitor.
+    (hyunsik)
+
+    TAJO-87: Integration of tajo algebra module and SQL parser. (hyunsik)
+
+    TAJO-70: Refactor GlobalEngine to handle DDL statements. (hyunsik)
+
+    TAJO-86: Improved error messages in query analyzer. (jinho)
+
+    TAJO-85: Add an method of create(DataType, byte[]) to DatumFactory. (jihoon)
+
+    TAJO-79: Refactor and Improve TajoCli. (hyunsik)
+
+    TAJO-77: Rename TabletProto as FragmentProto in CatalogProtos.proto. 
+    (jihoon)
+
+    TAJO-22: The package prefix should be org.apache.tajo. (DaeMyung Kang via 
+    hyunsik)
+
+    TAJO-75: Separate SQL.g into SQLParser.g and SQLLexer.g. (hyunsik)
+
+    TAJO-74: Refactor parser rules of SQL.g. (hyunsik)
+
+    TAJO-7: Enabling TajoCli to take multiple lines as one statement. (jinho)
+
+    TAJO-72: Rename NQL.g to SQL.g. (hyunsik)
+
+    TAJO-71: Case-insensitive parser. (hyunsik)
+
+    TAJO-40: Adopt YarnClient to GlobalEngine. (jihoon)
+
+    TAJO-69: Add .reviewboardrc file to the ignore lists of Rat and .gitignore. 
+    (hyunsik)
+
+    TAJO-66: Support compiling and running Tajo with Java7 (Tejas Patil via 
+    hsaputra)
+
+    TAJO-51: Parallel Container Launch of TaskRunnerLauncherImpl. (hyunsik)
+    
+    TAJO-39 Remove the unused package tajo.engine.plan.global and all files 
+    inside the directory. (hsaputra)
+
+    TAJO-37: Remove obsolete classes WorkerEventDispatcher, WorkerEvent and 
+    WorkerEventType. (sunny.1324 via hyunsik)
+
+    TAJO-50: Cleanup SubQuery. (hyunsik)
+
+    TAJO-44: Adopt AMRMClient to RMContainerAllocator, RMCommunicator. (hyunsik)
+    
+    TAJO-42: Divide SubQuery into FSM and execution block parts. (hyunsik)
+
+    TAJO-32: Cleanup TaskRunner. (hyunsik)
+
+    TAJO-27: Modify the document links to point the wiki's ones. (hyunsik)
+    
+    TAJO-17: Improve the examples for jvm version and auxiliary service in 
+    getting_started.apt. (hyunsik)
+
+    TAJO-10: Modify git ignore to include Apache derby log file. (hsaputra)
+
+    TAJO-12: Add information in README on how to subscribe to mailing 
+    lists (mattmann, hyunsik)
+
+    TAJO-11: Update file README to reflect Apache incubation. (hyunsik)
+
+    TAJO-4: Update the project site. (hyunsik)
+
+    TAJO-2: remove all @author tags and update license header. (hyunsik)
+
+  BUG FIXES
+
+    TAJO-759: Fix findbug errors added recently. (hyunsik)
+
+    TAJO-754: failure of INSERT INTO may remove the target table.
+    (hyunsik)
+
+    TAJO-682: RangePartitionAlgorithm should be improved to handle empty
+    texts. (hyunsik)
+
+    TAJO-511: Sometimes, a query progress becomes higher than 100%. (jihoon)
+
+    TAJO-281: 'mvn package -Pdist' generates duplicate Tajo jar files.
+    (hyunsik)
+
+    TAJO-277: Infinite loop occurs when a table is empty. (jinho)
+
+    TAJO-273: NotEval incurs NPE with boolean column. (hyunsik)
+
+    TAJO-272: boolean test does not work correctly. (hyunsik)
+
+    TAJO-264: Remove hard-coded 'standby' mode. (jinho)
+
+    TAJO-262: Integration test hang on jenkins. (jinho)
+
+    TAJO-257: Unit tests occasionally fail. (hyunsik)
+
+    TAJO-169: the default TAJO_WORKER_STANDBY_MODE in tajo-env.sh is wrong. 
+    (hyunsik)
+
+    TAJO-231: In StorageManger v2, TestCSVCompression incurs unexpected end of 
+    stream occasionally. (hyunsik)
+
+    TAJO-250: QueryMaster must send the query finish heartbeat. (hyunsik)
+
+    TAJO-245: org.apache.tajo.algebra.FunctionExpr cannot be cast to 
+    org.apache.tajo.algebra.ColumnReferenceExpr. (hyunsik)
+
+    TAJO-243: The 'tajo_dump' does not include options of table. (jinho)
+
+    TAJO-244: assignToNonLeafTasks causes NPE occurs occasionally. (hyunsik)
+
+    TAJO-242: Enable omitted broadcast join feature after TAJO-184. (hyunsik)
+
+    TAJO-240: Reformat HiveConverter source code to match adopted conventions 
+    (jaehwa)   
+
+    TAJO-241: Does not reconnect the meta store. (jinho)
+
+    TAJO-226: Can't use group by column alias. (hyunsik)
+
+    TAJO-203: Field delimiter does not work correctly. (jinho)
+
+    TAJO-205: Repartitioner occasionally chooses a partition number as one.
+    (hyunsik)
+
+    TAJO-191: INSERT OVERWRITE INTO statement should follow the table meta in 
+    catalog. (jinho)
+
+    TAJO-198: The split function does not work properly. (jinho)
+
+    TAJO-187: The exception 'Some targets cannot be evaluated' is caused in 
+    nested joins. (hyunsik)
+
+    TAJO-46: The "having" clause does not work properly. (hyunsik)
+
+    TAJO-186: Improve column resolving method. (hyunsik)
+
+    TAJO-168: infinite loop occurs when QueryMaster is stopping. (jinho)
+
+    TAJO-180: Better error messages for 
+    StorageManager.listStatus$InvalidInputException. (hyunsik)
+
+    TAJO-177: Call by reference bug in MergeJoinExec. (jihoon)
+
+    TAJO-171: BitArray always returned false. (jinho)
+
+    TAJO-172: TajoWorker allocate wrong container slots.(jinho)
+
+    TAJO-174: SQL error handler sometimes occurred NPE. (jinho)
+
+    TAJO-170: mvn compile error when building tar file. (jaehwa)
+
+    TAJO-154: Query calculates wrong progress in multiple step queries.
+    (hyunsik)
+
+    TAJO-152: The tajo local directory path is mismatched in PullServer. 
+    (jihoon)
+
+    TAJO-80: Remove codes of legacy data paths. (jihoon)
+ 
+    TAJO-159: QueryMaster cannot connect the remote CatalogServer. (hyunsik)
+
+    TAJO-158: Can't allocate worker when single SubQuery requests more than
+    cluster capacity. (hyoungjunkim via hyunsik)
+
+    TAJO-157: The CSVScanner.isSplittable() function does not work properly.
+    (jinho)
+
+    TAJO-156: BufferUnderflowException occurs during processing the 
+    intermediate file. (jinho)
+
+    TAJO-151: Multiple union queries within a table subquery causes NPE.
+    (hyunsik)
+
+    TAJO-137: Unreleased resources and wrong allocation requests in
+    TajoWorkerResourceManager. (hyoungjunkim via hyunsik)
+
+    TAJO-130: Same queryConf file conflicts. (jinho)
+
+    TAJO-82: NullPointerException occurs when Schema is converted as an array 
+    of columns. (jihoon)
+
+    TAJO-65: Invalid pom.xml configurations for source directories. 
+    (Takuya Ueshin via hyunsik)
+
+    TAJO-48: BufferUnderflowException occurs during the initialization of 
+    RowFile. (jihoon)
+
+    TAJO-58: Remove obsolete methods in GlobalPlanner. (hyunsik)
+
+    TAJO-54: SubQuery::allocateContainers() may ask 0 containers. (hyunsik)
+
+    TAJO-41: Storage handler name row in storage-default.xml must be rowfile. 
+    (hsaputra)
+
+    TAJO-47: RowFile has the duplicated initialization problem and unflipped 
+    ByteBuffer problem. (jihoon)
+
+    TAJO-38: Update class comment in TaskAttemptContext from Korean to English 
+    (hsaputra)
+
+    TAJO-15: The Integration test is getting hanged on Mac OS X. (hyunsik)
+
+    TAJO-8: MapReduce's ShuffleHandler and Tajo's PullServerAuxService conflict
+    each other. (jhkim)
+
+    TAJO-13: Update the groupId property in the pom.xml to use ASF org instead
+    of kr.ac.korea.dbserver (hsaputra)
+
+    TAJO-1: RCFileWrapper always reads whole columns regardless of the target 
+    schema. (jihoonson via hyunsik)
+
+    TAJO-6: Rename tajo.engine.function.builtin.NewSumInt to SumInt. (rsumbaly)
+
+    TAJO-21: CREATE EXTERNAL TABLE should support a file path. (JaeHwa Jung)
+
+  TASKS
+
+    TAJO-288: Correct NOTICE file and LICENSE.txt. (hyunsik)
+
+    TAJO-271: Add MIT license to NOTICE.txt and LICENSE.txt for jquery and 
+    jsPlumb. (hyunsik)
+
+    TAJO-265: Update installation guide and other documentation for 0.2
+    release. (hyunsik)
+
+    TAJO-252: Add DISCLAIMER file. (hyunsik)
+
+    TAJO-251: Rename the legacy name *.tql to *.sql. (hyunsik)

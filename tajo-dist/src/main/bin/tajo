@@ -1,0 +1,473 @@
+#!/usr/bin/env bash
+
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# The Tajo command script
+#
+# Environment Variables
+#
+#   JAVA_HOME        The java implementation to use.  Overrides JAVA_HOME.
+#
+#   TAJO_CLASSPATH Extra Java CLASSPATH entries.
+#
+#   TAJO_USER_CLASSPATH_FIRST      When defined, the TAJO_CLASSPATH is 
+#                                    added in the beginning of the global
+#                                    classpath. Can be defined, for example,
+#                                    by doing 
+#                                    export TAJO_USER_CLASSPATH_FIRST=true
+#
+#   TAJO_MASTER_HEAPSIZE  The maximum amount of heap to use, in MB. 
+#                         Default is 1000.
+#
+#   TAJO_WORKER_HEAPSIZE  The maximum amount of heap to use, in MB. 
+#                         Default is 1000.
+#
+#   TAJO_OPTS      Extra Java runtime options.
+
+#   TAJO_{COMMAND}_OPTS etc  TAJO_JT_OPTS applies to JobTracker 
+#                              for e.g.  TAJO_CLIENT_OPTS applies to 
+#                              more than one command (fs, dfs, fsck, 
+#                              dfsadmin etc)  
+#
+#   TAJO_CONF_DIR  Alternate conf dir. Default is ${TAJO_HOME}/conf.
+#
+#
+
+bin=`dirname "$0"`
+bin=`cd "$bin"; pwd`
+
+. "$bin"/tajo-config.sh
+
+cygwin=false
+case "`uname`" in
+CYGWIN*) cygwin=true;;
+esac
+
+function print_usage() {
+  echo "Usage: tajo [--config confdir] COMMAND"
+  echo "where COMMAND is one of:"
+  echo "  master               run the Master Server"
+  echo "  worker               run the Worker Server"
+  echo "  pullserver           run the Pull Server"
+  echo "  catalog              run the Catalog server"
+  echo "  catutil              catalog utility"
+  echo "  cli                  run the tajo cli"
+  echo "  admin                run the tajo admin util"
+  echo "  haadmin              run the tajo master HA admin util"
+  echo "  getconf              print tajo configuration"
+  echo "  jar <jar>            run a jar file"
+  echo "  benchmark            run the benchmark driver"
+  echo "  version              print the version"
+  echo " or"
+  echo "  CLASSNAME            run the class named CLASSNAME"
+  echo "Most commands print help when invoked w/o parameters."
+}
+
+# if no args specified, show usage
+if [ $# = 0 ]; then
+  print_usage
+  exit 1
+fi
+
+# get arguments
+COMMAND=$1
+shift
+
+if [ "$COMMAND" == "--help" ] || [ "$COMMAND" == "-help" ] || [ "$COMMAND" == "-h" ] ; then
+  print_usage
+  exit
+fi
+
+if [ -f "${TAJO_CONF_DIR}/tajo-env.sh" ]; then
+  . "${TAJO_CONF_DIR}/tajo-env.sh"
+fi
+
+# Determine if we're starting a secure datanode, and if so, redefine appropriate variables
+if [ "$COMMAND" == "datanode" ] && [ "$EUID" -eq 0 ] && [ -n "$TAJO_SECURE_DN_USER" ]; then
+  TAJO_PID_DIR=$TAJO_SECURE_DN_PID_DIR
+  TAJO_LOG_DIR=$TAJO_SECURE_DN_LOG_DIR
+  TAJO_IDENT_STRING=$TAJO_SECURE_DN_USER
+  starting_secure_dn="true"
+fi
+
+# some Java parameters
+if [ "$JAVA_HOME" != "" ]; then
+  #echo "run java in $JAVA_HOME"
+  JAVA_HOME=$JAVA_HOME
+fi
+  
+if [ "$JAVA_HOME" = "" ]; then
+  echo "Error: JAVA_HOME is not set."
+  exit 1
+fi
+
+JAVA=$JAVA_HOME/bin/java
+JAVA_TAJO_MASTER_HEAP_MAX=-Xmx1000m 
+JAVA_WORKER_HEAP_MAX=-Xmx1000m
+JAVA_QUERYMASTER_HEAP_MAX=-Xmx1000m
+JAVA_PULLSERVER_HEAP_MAX=-Xmx1000m
+
+# check envvars which might override default args
+if [ "$TAJO_MASTER_HEAPSIZE" != "" ]; then
+  #echo "run with heapsize $TAJO_MASTER_HEAPSIZE"
+  JAVA_TAJO_MASTER_HEAP_MAX="-Xmx""$TAJO_MASTER_HEAPSIZE""m"
+  #echo $JAVA_MASTER_HEAP_MAX
+fi
+if [ "$TAJO_WORKER_HEAPSIZE" != "" ]; then
+  #echo "run with heapsize $TAJO_WORKER_HEAPSIZE"
+  JAVA_WORKER_HEAP_MAX="-Xmx""$TAJO_WORKER_HEAPSIZE""m"
+  #echo $JAVA_WORKER_HEAP_MAX
+fi
+if [ "$TAJO_PULLSERVER_HEAPSIZE" != "" ]; then
+  #echo "run with heapsize $TAJO_PULLSERVER_HEAPSIZE"
+  JAVA_PULLSERVER_HEAP_MAX="-Xmx""$TAJO_PULLSERVER_HEAPSIZE""m"
+  #echo $JAVA_PULLSERVER_HEAP_MAX
+fi
+if [ "$TAJO_QUERYMASTER_HEAPSIZE" != "" ]; then
+  #echo "run with heapsize $TAJO_QUERYMASTER_HEAPSIZE"
+  JAVA_QUERYMASTER_HEAP_MAX="-Xmx""$TAJO_QUERYMASTER_HEAPSIZE""m"
+  #echo $JAVA_QUERYMASTER_HEAP_MAX
+fi
+
+
+##############################################################################
+# Hadoop Version Checking Section Start
+##############################################################################
+
+# check for hadoop in the path
+HADOOP_IN_PATH=`which hadoop 2>/dev/null`
+if [ -f ${HADOOP_IN_PATH} ]; then
+  HADOOP_DIR=`dirname "$HADOOP_IN_PATH"`/..
+fi
+# HADOOP_HOME env variable overrides hadoop in the path
+HADOOP_HOME=${HADOOP_HOME:-$HADOOP_DIR}
+if [ "$HADOOP_HOME" == "" ]; then
+  echo "Cannot find hadoop installation: \$HADOOP_HOME must be set or hadoop must be in the path";
+  exit 4;
+fi
+
+HADOOP=$HADOOP_HOME/bin/hadoop
+if [ ! -f ${HADOOP} ]; then
+  echo "Cannot find hadoop installation: \$HADOOP_HOME must be set or hadoop must be in the path";
+  exit 4;
+fi
+
+# Make sure we're using a compatible version of Hadoop
+if [ "x$HADOOP_VERSION" == "x" ]; then
+    HADOOP_VERSION=$($HADOOP version | awk '{if (NR == 1) {print $2;}}');
+fi
+
+# Save the regex to a var to workaround quoting incompatibilities
+# between Bash 3.1 and 3.2
+hadoop_version_re="^([[:digit:]]+)\.([[:digit:]]+)(\.([[:digit:]]+))?.*$"
+
+if [[ "$HADOOP_VERSION" =~ $hadoop_version_re ]]; then
+    hadoop_major_ver=${BASH_REMATCH[1]}
+    hadoop_minor_ver=${BASH_REMATCH[2]}
+    hadoop_patch_ver=${BASH_REMATCH[4]}
+else
+    echo "Unable to determine Hadoop version information."
+    echo "'hadoop version' returned:"
+    echo `$HADOOP version`
+    exit 5
+fi
+
+if [ "$hadoop_major_ver" -lt "1" -a  "$hadoop_minor_ver$hadoop_patch_ver" -lt "201" ]; then
+    echo "Tajo requires Hadoop 0.20.x (x >= 1)."
+    echo "'hadoop version' returned:"
+    echo `$HADOOP version`
+    exit 6
+fi
+
+# Allow alternate conf dir location.
+HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-$HADOOP_HOME/etc/hadoop}"
+
+# CLASSPATH initially contains $HADOOP_CONF_DIR and tools.jar
+CLASSPATH="${HADOOP_CONF_DIR}:${JAVA_HOME}/lib/tools.jar"
+
+##############################################################################
+# Hadoop Version Checking Section End
+##############################################################################
+
+##############################################################################
+# Find and Set Hadoop CLASSPATH
+##############################################################################
+
+# HADOOP JAR DIRS
+HADOOP_MODULE_DIRS="$HADOOP_HOME/share/hadoop/common/lib
+$HADOOP_HOME/share/hadoop/common
+$HADOOP_HOME/share/hadoop/hdfs
+$HADOOP_HOME/share/hadoop/hdfs/lib
+$HADOOP_HOME/share/hadoop/yarn
+$HADOOP_HOME/share/hadoop/mapreduce"
+
+for d in $HADOOP_MODULE_DIRS; do
+  CLASSPATH=${CLASSPATH}:$d/*
+done;
+
+HDFS_LIBRARY_PATH="${HADOOP_HOME}/lib/native/"
+##############################################################################
+# Hadoop Home Configuration End
+##############################################################################
+
+##############################################################################
+# HBase Configuration Start
+##############################################################################
+
+HBASE_CONF=$HBASE_HOME/conf
+
+if [ -d ${HBASE_CONF} ]; then
+  CLASSPATH=${HBASE_CONF}:${CLASSPATH}
+fi
+
+HBASE_LIB=$HBASE_HOME/lib
+
+if [ -d ${HBASE_LIB} ]; then
+
+  for f in ${HBASE_LIB}/hbase-client-*.jar; do
+    CLASSPATH=${CLASSPATH}:$f;
+  done
+
+  for f in ${HBASE_LIB}/hbase-common-*.jar; do
+    CLASSPATH=${CLASSPATH}:$f;
+  done
+
+  for f in ${HBASE_LIB}/hbase-protocol-*.jar; do
+    CLASSPATH=${CLASSPATH}:$f;
+  done
+
+  for f in ${HBASE_LIB}/htrace-core-*.jar; do
+    CLASSPATH=${CLASSPATH}:$f;
+  done
+
+fi
+
+##############################################################################
+# HBase Configuration End
+##############################################################################
+
+##############################################################################
+# Find and Set Hive CLASSPATH
+##############################################################################
+
+HIVE_CONF=$HIVE_HOME/conf
+
+if [ -d ${HIVE_CONF} ]; then
+  CLASSPATH=${HIVE_CONF}:${CLASSPATH}
+fi
+
+HIVE_LIB=$HIVE_HOME/lib
+
+if [ -d ${HIVE_LIB} ]; then
+
+  for f in ${HIVE_LIB}/hive-*.jar; do
+    CLASSPATH=${CLASSPATH}:$f;
+  done
+
+  for f in ${HIVE_LIB}/libthrift-*.jar; do
+    CLASSPATH=${CLASSPATH}:$f;
+  done
+
+  for f in ${HIVE_LIB}/libfb*.jar; do
+      CLASSPATH=${CLASSPATH}:$f;
+  done
+
+  for f in ${HIVE_LIB}/jdo*-api-*.jar; do
+    CLASSPATH=${CLASSPATH}:$f;
+  done
+
+  for f in ${HIVE_LIB}/datanucleus-*.jar; do
+    CLASSPATH=${CLASSPATH}:$f;
+  done
+
+fi
+
+if [ "${HIVE_JDBC_DRIVER_DIR}" != "" ]; then
+  CLASSPATH=${CLASSPATH}:$HIVE_JDBC_DRIVER_DIR;
+fi
+
+##############################################################################
+# Hive Home Configuration End
+##############################################################################
+
+
+##############################################################################
+# Find and Set Tajo CLASSPATH
+##############################################################################
+
+# TAJO_BASE_CLASSPATH initially contains $TAJO_CONF_DIR
+TAJO_BASE_CLASSPATH="${TAJO_CONF_DIR}"
+
+# for developers, add Tajo classes to TAJO_BASE_CLASSPATH
+if [ -d "$TAJO_HOME/target/classes" ]; then
+  TAJO_BASE_CLASSPATH=${TAJO_BASE_CLASSPATH}:$TAJO_HOME/target/classes
+fi
+if [ -d "$TAJO_HOME/target/test/classes" ]; then
+  TAJO_BASE_CLASSPATH=${TAJO_BASE_CLASSPATH}:$TAJO_HOME/target/test/classes
+fi
+
+# so that filenames w/ spaces are handled correctly in loops below
+IFS=$'\n'
+
+# Tajo Jar Directory
+TAJO_JAR_DIRS="$TAJO_HOME
+${TAJO_HOME}/lib"
+
+# We need to avoid the inclusion of slf4 twice.
+for d in $TAJO_JAR_DIRS; do
+  for j in `find $d/*.jar ! -name "*test*" | grep -v slf4`; do
+    TAJO_BASE_CLASSPATH=$TAJO_BASE_CLASSPATH:$j
+  done
+done
+
+# add user-specified CLASSPATH last
+if [ "$TAJO_CLASSPATH" != "" ]; then
+  if [ "$TAJO_USER_CLASSPATH_FIRST" != "" ]; then
+    TAJO_BASE_CLASSPATH=${TAJO_CLASSPATH}:${TAJO_BASE_CLASSPATH}
+  else
+    TAJO_BASE_CLASSPATH=${TAJO_BASE_CLASSPATH}:${TAJO_CLASSPATH}
+  fi
+fi
+
+export TAJO_BASE_CLASSPATH
+
+CLASSPATH="${TAJO_BASE_CLASSPATH}:${CLASSPATH}"
+
+##############################################################################
+# Tajo Home Configuration End
+##############################################################################
+
+# restore ordinary behaviour
+unset IFS
+
+# default log directory & file
+if [ "$TAJO_LOG_DIR" = "" ]; then
+  TAJO_LOG_DIR="$TAJO_HOME/logs"
+fi
+if [ "$TAJO_LOGFILE" = "" ]; then
+  TAJO_LOGFILE='tajo.log'
+fi
+
+# default policy file for service-level authorization
+if [ "$TAJO_POLICYFILE" = "" ]; then
+  TAJO_POLICYFILE="tajo-policy.xml"
+fi
+
+# Disable IPv6 Support for network performance
+TAJO_OPTS="$TAJO_OPTS -Djava.net.preferIPv4Stack=true"
+
+# figure out which class to run
+if [ "$COMMAND" = "classpath" ] ; then
+  if $cygwin; then
+    CLASSPATH=`cygpath -p -w "$CLASSPATH"`
+  fi
+  echo $CLASSPATH
+  exit
+elif [ "$COMMAND" = "master" ] ; then
+  CLASS='org.apache.tajo.master.TajoMaster'
+  TAJO_OPTS="$TAJO_OPTS $JAVA_TAJO_MASTER_HEAP_MAX $TAJO_MASTER_OPTS"
+elif [ "$COMMAND" = "worker" ] ; then
+  CLASS='org.apache.tajo.worker.TajoWorker'
+  TAJO_OPTS="$TAJO_OPTS $JAVA_WORKER_HEAP_MAX $TAJO_WORKER_OPTS"
+elif [ "$COMMAND" = "pullserver" ] ; then
+  CLASS='org.apache.tajo.pullserver.TajoPullServer'
+  TAJO_OPTS="$TAJO_OPTS $JAVA_PULLSERVER_HEAP_MAX $TAJO_PULLSERVER_OPTS"
+elif [ "$COMMAND" = "catalog" ] ; then
+  CLASS='org.apache.tajo.catalog.CatalogServer'
+  TAJO_OPTS="$TAJO_OPTS $TAJO_CATALOG_OPTS"
+elif [ "$COMMAND" = "cli" ] ; then
+  CLASS='org.apache.tajo.cli.tsql.TajoCli'
+  TAJO_ROOT_LOGGER_APPENDER="${TAJO_ROOT_LOGGER_APPENDER:-NullAppender}"
+  TAJO_OPTS="$TAJO_OPTS $TAJO_CLI_OPTS"
+elif [ "$COMMAND" = "admin" ] ; then
+  CLASS='org.apache.tajo.cli.tools.TajoAdmin'
+  TAJO_ROOT_LOGGER_APPENDER="${TAJO_ROOT_LOGGER_APPENDER:-NullAppender}"
+  TAJO_OPTS="$TAJO_OPTS $TAJO_CLI_OPTS"
+elif [ "$COMMAND" = "haadmin" ] ; then
+  CLASS='org.apache.tajo.cli.tools.TajoHAAdmin'
+  TAJO_ROOT_LOGGER_APPENDER="${TAJO_ROOT_LOGGER_APPENDER:-NullAppender}"
+  TAJO_OPTS="$TAJO_OPTS $TAJO_CLI_OPTS"
+elif [ "$COMMAND" = "getconf" ] ; then
+  CLASS='org.apache.tajo.cli.tools.TajoGetConf'
+  TAJO_ROOT_LOGGER_APPENDER="${TAJO_ROOT_LOGGER_APPENDER:-NullAppender}"
+  TAJO_OPTS="$TAJO_OPTS $TAJO_CLI_OPTS"
+elif [ "$COMMAND" = "dump" ] ; then
+  CLASS='org.apache.tajo.cli.tools.TajoDump'
+  TAJO_ROOT_LOGGER_APPENDER="${TAJO_ROOT_LOGGER_APPENDER:-NullAppender}"
+  TAJO_OPTS="$TAJO_OPTS $TAJO_DUMP_OPTS"
+elif [ "$COMMAND" = "version" ] ; then
+  CLASS='org.apache.tajo.util.VersionInfo'
+  TAJO_ROOT_LOGGER_APPENDER="${TAJO_ROOT_LOGGER_APPENDER:-NullAppender}"
+  TAJO_OPTS="$TAJO_OPTS $TAJO_CLI_OPTS"
+else
+  CLASS=$COMMAND
+fi
+
+# cygwin path translation
+if $cygwin; then
+  CLASSPATH=`cygpath -p -w "$CLASSPATH"`
+  TAJO_HOME=`cygpath -w "$TAJO_HOME"`
+  TAJO_LOG_DIR=`cygpath -w "$TAJO_LOG_DIR"`
+  TOOL_PATH=`cygpath -p -w "$TOOL_PATH"`
+fi
+# setup 'java.library.path' for native-tajo code if necessary
+JAVA_LIBRARY_PATH=''
+if [ -d "${TAJO_HOME}/build/native" -o -d "${TAJO_HOME}/lib/native" ]; then
+  JAVA_PLATFORM=`CLASSPATH=${CLASSPATH} ${JAVA} -Xmx32m ${TAJO_JAVA_PLATFORM_OPTS} org.apache.tajo.util.PlatformName | sed -e "s/ /_/g"`
+  
+  if [ -d "$TAJO_HOME/build/native" ]; then
+    JAVA_LIBRARY_PATH=${TAJO_HOME}/build/native/${JAVA_PLATFORM}/lib
+  fi
+  
+  if [ -d "${TAJO_HOME}/lib/native" ]; then
+    if [ "x$JAVA_LIBRARY_PATH" != "x" ]; then
+      JAVA_LIBRARY_PATH=${JAVA_LIBRARY_PATH}:${TAJO_HOME}/lib/native/${JAVA_PLATFORM}
+    else
+      JAVA_LIBRARY_PATH=${TAJO_HOME}/lib/native/${JAVA_PLATFORM}
+    fi
+  fi
+fi
+
+if [ "x$JAVA_LIBRARY_PATH" != "x" ]; then
+    JAVA_LIBRARY_PATH=${JAVA_LIBRARY_PATH}:${HDFS_LIBRARY_PATH}
+  else
+    JAVA_LIBRARY_PATH=${HDFS_LIBRARY_PATH}
+fi
+
+# cygwin path translation
+if $cygwin; then
+  JAVA_LIBRARY_PATH=`cygpath -p "$JAVA_LIBRARY_PATH"`
+fi
+
+TAJO_OPTS="$TAJO_OPTS -Dtajo.log.dir=$TAJO_LOG_DIR"
+TAJO_OPTS="$TAJO_OPTS -Dtajo.log.file=$TAJO_LOGFILE"
+TAJO_OPTS="$TAJO_OPTS -Dtajo.home.dir=$TAJO_HOME"
+TAJO_OPTS="$TAJO_OPTS -Dtajo.id.str=$TAJO_IDENT_STRING"
+TAJO_OPTS="$TAJO_OPTS -Dtajo.root.logger.appender=${TAJO_ROOT_LOGGER_APPENDER:-console}"
+if [ "x$TAJO_ROOT_LOGGER_LEVEL" != "x" ]; then
+  TAJO_OPTS="$TAJO_OPTS -Dtajo.root.logger.level=${TAJO_ROOT_LOGGER_LEVEL}"
+fi
+
+if [ "x$JAVA_LIBRARY_PATH" != "x" ]; then
+  TAJO_OPTS="$TAJO_OPTS -Djava.library.path=$JAVA_LIBRARY_PATH"
+fi  
+TAJO_OPTS="$TAJO_OPTS -Dtajo.policy.file=$TAJO_POLICYFILE"
+
+# run it
+export CLASSPATH=$CLASSPATH
+exec "$JAVA" -Dproc_$COMMAND $TAJO_OPTS $CLASS $TAJO_DAEMON_MODE "$@"

@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Refer to http://tajo.apache.org/docs/current/configuration/catalog_configuration.html -->
+
+<configuration>
+
+<!-- JDBC Common Settings -->
+
+<!-- Please remove comments if you want JDBC-based catalog store. -->
+<!--
+<property>
+  <name>tajo.catalog.jdbc.connection.id</name>
+  <value><mysql user name></value>
+</property>
+<property>
+  <name>tajo.catalog.jdbc.connection.password</name>
+  <value><mysql user password></value>
+</property>
+-->
+
+<!-- JDBC Store Section -->
+
+<!-- Please remove comments corresponding to your desired catalog store. -->
+<!-- You must choose only one catalog store driver among them. -->
+
+ <!-- MySQL Catalog Store Driver -->
+ <!--
+ <property>
+  <name>tajo.catalog.store.class</name>
+  <value>org.apache.tajo.catalog.store.MySQLStore</value>
+ </property>
+ <property>
+  <name>tajo.catalog.jdbc.uri</name>
+  <value>jdbc:mysql://<host name>:<mysql port>/<database name for tajo>?createDatabaseIfNotExist=true</value>
+ </property>
+ -->
+
+ <!-- MariaDB Catalog Store Driver -->
+ <!--
+ <property>
+  <name>tajo.catalog.store.class</name>
+  <value>org.apache.tajo.catalog.store.MariaDBStore</value>
+ </property>
+ <property>
+  <name>tajo.catalog.jdbc.uri</name>
+  <value>jdbc:mariadb://<mariadb host name>:<mariadb port>/<database name for tajo>?createDatabaseIfNotExist=true</value>
+ </property>
+ -->
+
+ <!-- PostgreSQL Catalog Store Driver -->
+ <!--
+ <property>
+  <name>tajo.catalog.store.class</name>
+  <value>org.apache.tajo.catalog.store.PostgreSQLStore</value>
+ </property>
+ <property>
+  <name>tajo.catalog.jdbc.uri</name>
+  <value>jdbc:mariadb://<mariadb host name>:<mariadb port>/<database name for tajo>?createDatabaseIfNotExist=true</value>
+ </property>
+ -->
+
+ <!-- Oracle Catalog Store Driver -->
+ <!--
+ <property>
+  <name>tajo.catalog.store.class</name>
+  <value>org.apache.tajo.catalog.store.OracleStore</value>
+ </property>
+ -->
+
+
+<!-- HiveCatalog Store Driver -->
+<!-- Please remove comment if you want to use HiveCatalog. -->
+<!--
+<property>
+  <name>tajo.catalog.store.class</name>
+  <value>org.apache.tajo.catalog.store.HiveCatalogStore</value>
+</property>
+-->
+
+</configuration>

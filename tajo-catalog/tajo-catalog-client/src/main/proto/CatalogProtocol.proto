@@ -1,0 +1,76 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+option java_package = "org.apache.tajo.catalog";
+option java_outer_classname = "CatalogProtocol";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+
+import "CatalogProtos.proto";
+import "PrimitiveProtos.proto";
+
+service CatalogProtocolService {
+
+  rpc createTablespace(CreateTablespaceRequest) returns (BoolProto);
+  rpc dropTablespace(StringProto) returns (BoolProto);
+  rpc existTablespace(StringProto) returns (BoolProto);
+  rpc getAllTablespaces(NullProto) returns (GetTablespacesProto);
+  rpc getAllTablespaceNames(NullProto) returns (StringListProto);
+  rpc getTablespace(StringProto) returns (TablespaceProto);
+  rpc alterTablespace(AlterTablespaceProto) returns (BoolProto);
+  rpc alterTable(AlterTableDescProto) returns (BoolProto);
+  rpc updateTableStats(UpdateTableStatsProto) returns (BoolProto);
+
+  rpc createDatabase(CreateDatabaseRequest) returns (BoolProto);
+  rpc dropDatabase(StringProto) returns (BoolProto);
+  rpc existDatabase(StringProto) returns (BoolProto);
+  rpc getAllDatabaseNames(NullProto) returns (StringListProto);
+  rpc getAllDatabases(NullProto) returns (GetDatabasesProto);
+
+  rpc createTable(TableDescProto) returns (BoolProto);
+  rpc dropTable(TableIdentifierProto) returns (BoolProto);
+  rpc existsTable(TableIdentifierProto) returns (BoolProto);
+  rpc getTableDesc(TableIdentifierProto) returns (TableDescProto);
+  rpc getAllTableNames(StringProto) returns (StringListProto);
+  rpc getAllTables(NullProto) returns (GetTablesProto);
+  rpc getAllTableOptions(NullProto) returns (GetTableOptionsProto);
+  rpc getAllTableStats(NullProto) returns (GetTableStatsProto);
+  rpc getAllColumns(NullProto) returns (GetColumnsProto);
+
+  rpc getPartitionMethodByTableName(TableIdentifierProto) returns (PartitionMethodProto);
+  rpc existPartitionMethod(TableIdentifierProto) returns (BoolProto);
+  rpc dropPartitionMethod(TableIdentifierProto) returns (BoolProto);
+
+  rpc getPartitionByPartitionName(PartitionIdentifierProto) returns (PartitionDescProto);
+  rpc getPartitionsByTableName(PartitionIdentifierProto) returns (PartitionsProto);
+  rpc getAllPartitions(NullProto) returns (GetTablePartitionsProto);
+
+  rpc createIndex(IndexDescProto) returns (BoolProto);
+  rpc dropIndex(IndexNameProto) returns (BoolProto);
+  rpc existIndexByName(IndexNameProto) returns (BoolProto);
+  rpc existIndexByColumn(GetIndexByColumnRequest) returns (BoolProto);
+  rpc getIndexByName(IndexNameProto) returns (IndexDescProto);
+  rpc getIndexByColumn(GetIndexByColumnRequest) returns (IndexDescProto);
+  rpc getAllIndexes(NullProto) returns (GetIndexesProto);
+
+  rpc createFunction(FunctionDescProto) returns (BoolProto);
+  rpc dropFunction(UnregisterFunctionRequest) returns (BoolProto);
+  rpc getFunctions(NullProto) returns (GetFunctionsResponse);
+  rpc getFunctionMeta(GetFunctionMetaRequest) returns (FunctionDescProto);
+  rpc containFunction(ContainFunctionRequest) returns (BoolProto);
+}

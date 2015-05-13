@@ -1,0 +1,71 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+//TajoClient -> TajoMaster Protocol
+option java_package = "org.apache.tajo.ipc";
+option java_outer_classname = "TajoMasterClientProtocol";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+
+import "tajo_protos.proto";
+import "TajoIdProtos.proto";
+import "CatalogProtos.proto";
+import "PrimitiveProtos.proto";
+import "ClientProtos.proto";
+
+service TajoMasterClientProtocolService {
+
+  // Session APIs
+  rpc createSession(CreateSessionRequest) returns (CreateSessionResponse);
+  rpc removeSession(SessionIdProto) returns (BoolProto);
+  rpc updateSessionVariables(UpdateSessionVariableRequest) returns (SessionUpdateResponse);
+  rpc existSessionVariable(SessionedStringProto) returns (BoolProto);
+  rpc getSessionVariable(SessionedStringProto) returns (StringProto);
+  rpc getAllSessionVariables(SessionIdProto) returns (KeyValueSetProto);
+
+  // Query Submission and Result APIs
+  rpc submitQuery(QueryRequest) returns (SubmitQueryResponse);
+  rpc updateQuery(QueryRequest) returns (UpdateQueryResponse);
+  rpc getQueryResult(GetQueryResultRequest) returns (GetQueryResultResponse);
+  rpc getQueryResultData(GetQueryResultDataRequest) returns (GetQueryResultDataResponse);
+
+  // Query And Resource Management APIs
+  rpc getQueryStatus(GetQueryStatusRequest) returns (GetQueryStatusResponse);
+  rpc getRunningQueryList(GetQueryListRequest) returns (GetQueryListResponse);
+  rpc getFinishedQueryList(GetQueryListRequest) returns (GetQueryListResponse);
+  rpc killQuery(QueryIdRequest) returns (BoolProto);
+  rpc getClusterInfo(GetClusterInfoRequest) returns (GetClusterInfoResponse);
+  rpc closeNonForwardQuery(QueryIdRequest) returns (BoolProto);
+  rpc getQueryInfo(QueryIdRequest) returns (GetQueryInfoResponse);
+
+  // Database Management APIs
+  rpc createDatabase(SessionedStringProto) returns (BoolProto);
+  rpc existDatabase(SessionedStringProto) returns (BoolProto);
+  rpc dropDatabase(SessionedStringProto) returns (BoolProto);
+  rpc getAllDatabases(SessionIdProto) returns (StringListProto);
+  rpc getCurrentDatabase(SessionIdProto) returns (StringProto);
+  rpc selectDatabase(SessionedStringProto) returns (BoolProto);
+
+  // Table Management APIs
+  rpc createExternalTable(CreateTableRequest) returns (TableResponse);
+  rpc existTable(SessionedStringProto) returns (BoolProto);
+  rpc dropTable(DropTableRequest) returns (BoolProto);
+  rpc getTableList(GetTableListRequest) returns (GetTableListResponse);
+  rpc getTableDesc(GetTableDescRequest) returns (TableResponse);
+  rpc getFunctionList(SessionedStringProto) returns (FunctionResponse);
+}
