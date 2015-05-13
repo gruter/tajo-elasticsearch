@@ -320,11 +320,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <dependency>
-      <groupId>org.apache.tajo</groupId>
-      <artifactId>tajo-core</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <profiles>
