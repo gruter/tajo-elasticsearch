@@ -35,7 +35,7 @@ $ cd ~/server/app/hadoop-2.3.0
 * Hadoop 2.3.0 or higher (up to 2.5.1)
 * Java 1.6 or 1.7
 * Protocol buffer 2.5.0
-** [Go to Link](http://tajo.apache.org/docs/0.10.0/getting_started.html)
+* [Go to Link](http://tajo.apache.org/docs/0.10.0/getting_started.html)
 
 # Source Clone & Build
 ```
