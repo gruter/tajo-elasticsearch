@@ -137,6 +137,7 @@ default>
 $ cd ~/server/app/elasticsearch/elasticsearch-1.1.2
 # no configuration
 $ bin/elasticsearch -f
+```
 
 # Create Index & Document
 ```java
