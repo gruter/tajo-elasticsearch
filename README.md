@@ -47,7 +47,7 @@ $ ls -al tajo-0.*.tar.gz
 -rw-r--r--  1 hwjeong  staff  59521544  5 14 13:59 tajo-0.11.0-SNAPSHOT.tar.gz
 ```
 
-# Apache Tajo Installation on MacBook
+# Apache Tajo Installation on OSX
 * [Go to Link](http://tajo.apache.org/docs/0.10.0/getting_started.html)
 ```
 $ cd ~/server/app
