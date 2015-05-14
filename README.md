@@ -26,10 +26,18 @@
 * JDK 6 or later
 * Elasticsearch 1.1.2
 
-# HADOOP_HOME
+# HADOOP
 ```
 $ cd ~/server/app/hadoop-2.3.0
+```
 
+# Prerequisites
+* Hadoop 2.3.0 or higher (up to 2.5.1)
+* Java 1.6 or 1.7
+* Protocol buffer 2.5.0
+** http://tajo.apache.org/docs/0.10.0/getting_started.html
+
+# Source Clone & Build
 ```
 $ git clone https://github.com/gruter/tajo-elasticsearch.git
 $ cd tajo-elasticsearch
