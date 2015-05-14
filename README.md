@@ -2,14 +2,14 @@
 * Collaborate Apache Tajo + Elasticsearch
 
 # Apache Tajo User Group
-* https://groups.google.com/forum/#!forum/tajo-user-kr
+* [Go to Link](https://groups.google.com/forum/#!forum/tajo-user-kr)
 
 # Apache Tajo Mailing List
-* http://tajo.apache.org/mailing-lists.html
+* [Go to Link](http://tajo.apache.org/mailing-lists.html)
 
 # Elasticsearch User Group
-* https://www.facebook.com/groups/elasticsearch.kr/
-* https://groups.google.com/forum/#!forum/elasticsearch
+* [Go to Link](https://www.facebook.com/groups/elasticsearch.kr/)
+* [Go to Link](https://groups.google.com/forum/#!forum/elasticsearch)
 
 # Registerer
 * hwjeong@gruter.com
@@ -35,7 +35,7 @@ $ cd ~/server/app/hadoop-2.3.0
 * Hadoop 2.3.0 or higher (up to 2.5.1)
 * Java 1.6 or 1.7
 * Protocol buffer 2.5.0
-** http://tajo.apache.org/docs/0.10.0/getting_started.html
+** [Go to Link](http://tajo.apache.org/docs/0.10.0/getting_started.html)
 
 # Source Clone & Build
 ```
@@ -48,7 +48,7 @@ $ ls -al tajo-0.*.tar.gz
 ```
 
 # Apache Tajo Installation on MacBook
-* http://tajo.apache.org/docs/0.10.0/getting_started.html
+* [Go to Link](http://tajo.apache.org/docs/0.10.0/getting_started.html)
 ```
 $ cd ~/server/app
 $ mkdir tajo
@@ -131,7 +131,7 @@ default>
 ```
 
 # Elasticsearch Installation & Run
-* http://www.elastic.co/guide/en/elasticsearch/guide/master/_installing_elasticsearch.html
+* [Go to Link](http://www.elastic.co/guide/en/elasticsearch/guide/master/_installing_elasticsearch.html)
 * Installed elasticsearch-1.1.2
 ```
 $ cd ~/server/app/elasticsearch/elasticsearch-1.1.2
@@ -274,7 +274,7 @@ public class ElasticsearchCRUDTest {
 ```
 
 # Check Status
-* http://localhost:9200/_status?pretty=true
+* [Go to Link](http://localhost:9200/_status?pretty=true)
 
 # Create External Table for Elasticsearch on Tajo and Test Query
 ```
@@ -329,4 +329,22 @@ tajo_es_type,  0.0,  12,  12,  henry12,  12. hello world!! elasticsearch on apac
 tajo_es_type,  0.0,  13,  13,  henry13,  13. hello world!! elasticsearch on apache tajo!!
 tajo_es_type,  0.0,  14,  14,  henry14,  14. hello world!! elasticsearch on apache tajo!!
 (4 rows, 0.583 sec, 320 B selected)
+```
+
+# Elasticsearch "with" Options
+```java
+  public static final String OPT_CLUSTER = "es.cluster";
+  public static final String OPT_NODES = "es.nodes";
+  public static final String OPT_INDEX = "es.index";
+  public static final String OPT_TYPE = "es.type";
+  public static final String OPT_FETCH_SIZE = "es.fetch.size";
+  public static final String OPT_PRIMARY_SHARD = "es.primary.shard";
+  public static final String OPT_REPLICA_SHARD = "es.replica.shard";
+  public static final String OPT_PING_TIMEOUT = "es.ping.timeout";
+  public static final String OPT_CONNECT_TIMEOUT = "es.connect.timeout";
+  public static final String OPT_THREADPOOL_RECOVERY = "es.threadpool.recovery";
+  public static final String OPT_THREADPOOL_BULK = "es.threadpool.bulk";
+  public static final String OPT_THREADPOOL_REG = "es.threadpool.reg";
+  public static final String OPT_TIME_SCROLL = "es.time.scroll";
+  public static final String OPT_TIME_ACTION = "es.time.action";
 ```
