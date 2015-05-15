@@ -98,7 +98,7 @@ $ bin/hadoop fs -moveFromLocal ~/server/app/tajo/tajo/data.csv /user/tajo/
 # Apache Tajo CLI
 ```
 $ cd ~/server/app/tajo/tajo
-$ bin/sql
+$ bin/tsql
 default> create external table tajodemotbl (id int, name text, score float, type text) using csv with ('csvfile.delimiter'='|') location 'hdfs://localhost:9000/user/tajo/data.csv';
 OK
 default> \d tajodemotbl;
