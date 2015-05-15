@@ -72,7 +72,7 @@ $ chmod 600 authorized_keys
 
 # Apache Tajo Run & Sample Data
 ```
-$ ~/server/app/tajo/tajo
+$ cd ~/server/app/tajo/tajo
 $ bin/start-tajo.sh
 $ cat > data.csv
 1|abc|1.1|a
