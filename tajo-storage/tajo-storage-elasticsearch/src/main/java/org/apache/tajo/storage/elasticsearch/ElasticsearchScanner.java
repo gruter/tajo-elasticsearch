@@ -34,11 +34,12 @@ import org.apache.tajo.storage.fragment.Fragment;
 import org.apache.tajo.storage.json.JsonLineDeserializer;
 import org.apache.tajo.storage.text.TextLineDeserializer;
 import org.apache.tajo.storage.text.TextLineParsingError;
-import org.elasticsearch.action.search.ClearScrollRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.ConstantScoreQueryBuilder;
 import org.elasticsearch.index.query.MatchAllQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 
 import java.io.IOException;
@@ -86,14 +87,6 @@ public class ElasticsearchScanner implements Scanner {
     if (columns == null) {
       columns = schema.toArray();
     }
-//
-//    columnIdxs = new int[columns.length];
-//
-//    for (int i = 0; i < columns.length; i++) {
-//      columnIdxs[i] = schema.getColumnId(columns[i].getQualifiedName());
-//    }
-//
-//    Arrays.sort(columnIdxs);
 
     deserializer = new JsonLineDeserializer(schema, tableMeta, columns);
     deserializer.init();
@@ -114,38 +107,24 @@ public class ElasticsearchScanner implements Scanner {
         client = ((ElasticsearchStorageManager) StorageManager.getStorageManager(conf, "ELASTICSEARCH")).getClient(optionInfo);
       }
 
+      ConstantScoreQueryBuilder constantScoreQueryBuilder = QueryBuilders.constantScoreQuery(new MatchAllQueryBuilder());
+
       SearchResponse res = client.prepareSearch(optionInfo.index())
           .setTypes(optionInfo.type())
-          .setSearchType(SearchType.SCAN)
-          .setPreference("_shards:" + shardId + ";_primary")
-          .setQuery(new MatchAllQueryBuilder())   // if it can receive a qual, query have to generate to query dsl.
+          .setSearchType(SearchType.DFS_QUERY_AND_FETCH)
+          .setPreference("_shards:" + shardId + ";_primary_first")
+          .setQuery(constantScoreQueryBuilder)   // if it can receive a qual, query have to generate to query dsl.
           .setFrom(offset)
           .setSize(fetchSize)
-          .setScroll(optionInfo.timeScroll())
           .execute()
           .actionGet(optionInfo.timeAction());
 
-      while ( true ) {
-        res = client.prepareSearchScroll(res.getScrollId())
-            .setScroll(optionInfo.timeScroll())
-            .execute()
-            .actionGet(optionInfo.timeAction());
+      for ( SearchHit doc : res.getHits().getHits() ) { // we replace to tajo data format which is a depth json line.
+        doc.sourceAsMap().put(ElasticsearchConstants.GLOBAL_FIELDS_TYPE, doc.getType());
+        doc.sourceAsMap().put(ElasticsearchConstants.GLOBAL_FIELDS_SCORE, doc.getScore());
+        doc.sourceAsMap().put(ElasticsearchConstants.GLOBAL_FIELDS_ID, doc.getId());
 
-        for ( SearchHit doc : res.getHits().getHits() ) { // we replace to tajo data format which is a depth json line.
-          doc.sourceAsMap().put(ElasticsearchConstants.GLOBAL_FIELDS_TYPE, doc.getType());
-          doc.sourceAsMap().put(ElasticsearchConstants.GLOBAL_FIELDS_SCORE, doc.getScore());
-          doc.sourceAsMap().put(ElasticsearchConstants.GLOBAL_FIELDS_ID, doc.getId());
-
-          docs.add(new JSONObject(doc.sourceAsMap()));
-        }
-
-        if (res.getHits().hits().length == 0) {
-          ClearScrollRequest csReq = new ClearScrollRequest();
-          csReq.addScrollId(res.getScrollId());
-
-          client.clearScroll(csReq).actionGet();
-          break;
-        }
+        docs.add(new JSONObject(doc.sourceAsMap()));
       }
     } catch (Exception e) {
       LOG.error(e.getMessage(), e);
