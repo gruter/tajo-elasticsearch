@@ -207,7 +207,7 @@ public class ElasticsearchScanner implements Scanner {
 
   @Override
   public boolean isProjectable() {
-    return false;
+    return true;
   }
 
   @Override
