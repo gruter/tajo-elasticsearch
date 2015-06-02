@@ -32,14 +32,8 @@ import org.apache.tajo.storage.StorageManager;
 import org.apache.tajo.storage.StorageProperty;
 import org.apache.tajo.storage.TupleRange;
 import org.apache.tajo.storage.fragment.Fragment;
-import org.elasticsearch.action.admin.cluster.state.ClusterStateRequest;
-import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
-import org.elasticsearch.action.admin.indices.stats.CommonStats;
-import org.elasticsearch.action.admin.indices.stats.IndexStats;
-import org.elasticsearch.action.admin.indices.stats.IndicesStatsRequest;
-import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
+import org.elasticsearch.action.admin.indices.stats.*;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.ClusterAdminClient;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.routing.ShardRouting;
@@ -112,15 +106,11 @@ public class ElasticsearchStorageManager extends StorageManager {
 
     try {
       client = getClient(opt);
-      ClusterAdminClient cluster = client.admin().cluster();
       IndicesAdminClient indices = client.admin().indices();
-      ClusterStateRequest clusterStateRequest = new ClusterStateRequest();
-      ClusterStateResponse clusterStateResponse;
       IndicesStatsRequest indicesStatsRequest = new IndicesStatsRequest();
       IndicesStatsResponse indicesStatsResponse;
 
       indicesStatsRequest.indices(opt.index()).types(opt.type());
-      clusterStateResponse = cluster.state(clusterStateRequest).actionGet();
       indicesStatsResponse = indices.stats(indicesStatsRequest).actionGet();
 
       // have to reduce a method call.
@@ -129,12 +119,13 @@ public class ElasticsearchStorageManager extends StorageManager {
       String nodes = opt.nodes();
       int fetchSize = opt.fetchSize();
 
-      for (ShardRouting shard : clusterStateResponse.getState().routingTable().allShards()) {
-        CommonStats shardStats = indicesStatsResponse.asMap().get(shard);
+      for ( ShardStats shardStats : indicesStatsResponse.getShards() ) {
+        CommonStats commonStats = shardStats.getStats();
+        ShardRouting shard = shardStats.getShardRouting();
 
         if ( shard.primary() && shard.assignedToNode() ) {
           int shardId = shard.id();
-          long docCount = shardStats.getDocs().getCount();
+          long docCount = commonStats.getDocs().getCount();
 
           if ( docCount <= fetchSize ) {
             ElasticsearchFragment fragment = new ElasticsearchFragment(tableDesc.getName(), index, type, nodes, shardId, 0, fetchSize);
@@ -169,15 +160,11 @@ public class ElasticsearchStorageManager extends StorageManager {
 
     try {
       client = getClient(opt);
-      ClusterAdminClient cluster = client.admin().cluster();
       IndicesAdminClient indices = client.admin().indices();
-      ClusterStateRequest clusterStateRequest = new ClusterStateRequest();
-      ClusterStateResponse clusterStateResponse;
       IndicesStatsRequest indicesStatsRequest = new IndicesStatsRequest();
       IndicesStatsResponse indicesStatsResponse;
 
       indicesStatsRequest.indices(opt.index()).types(opt.type());
-      clusterStateResponse = cluster.state(clusterStateRequest).actionGet();
       indicesStatsResponse = indices.stats(indicesStatsRequest).actionGet();
 
       String index = opt.index();
@@ -185,12 +172,13 @@ public class ElasticsearchStorageManager extends StorageManager {
       String nodes = opt.nodes();
       int fetchSize = opt.fetchSize();
 
-      for (ShardRouting shard : clusterStateResponse.getState().routingTable().allShards()) {
-        CommonStats shardStats = indicesStatsResponse.asMap().get(shard);
+      for ( ShardStats shardStats : indicesStatsResponse.getShards() ) {
+        CommonStats commonStats = shardStats.getStats();
+        ShardRouting shard = shardStats.getShardRouting();
 
         if ( shard.primary() && shard.assignedToNode() ) {
           int shardId = shard.id();
-          long docCount = shardStats.getDocs().getCount();
+          long docCount = commonStats.getDocs().getCount();
 
           if ( docCount <= fetchSize ) {
             ElasticsearchFragment fragment = new ElasticsearchFragment(tableDesc.getName(), index, type, nodes, shardId, 0, fetchSize);
