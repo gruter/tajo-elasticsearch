@@ -278,17 +278,33 @@ public class ElasticsearchCRUDTest {
 
 # Create External Table for Elasticsearch on Tajo and Test Query
 ```
-create external table tajo_es_index (
+create external table tajo_es_parent (
   _type text,
   _score double,
   _id text,
   field1 bigint,
-  field2 text,
-  field3 text
+  field2 bigint,
+  field3 text,
+  field4 text
 )
 using elasticsearch
 with (
-  'es.index'='tajo_es_index',
+  'es.index'='tajo_es_parent',
+  'es.type'='tajo_es_type'
+)
+
+create external table tajo_es_child (
+  _type text,
+  _score double,
+  _id text,
+  field1 bigint,
+  field2 bigint,
+  field3 text,
+  field4 text
+)
+using elasticsearch
+with (
+  'es.index'='tajo_es_child',
   'es.type'='tajo_es_type'
 )
 
@@ -296,39 +312,52 @@ $ cd ~/server/app/tajo/tajo
 $ bin/tsql
 
 Try \? for help.
-default> create external table tajo_es_index (
+default> create external table tajo_es_parent (
 >   _type text,
 >   _score double,
 >   _id text,
 >   field1 bigint,
->   field2 text,
->   field3 text
+>   field2 bigint,
+>   field3 text,
+>   field4 text
 > )
 > using elasticsearch
 > with (
->   'es.index'='tajo_es_index',
+>   'es.index'='tajo_es_parent',
 >   'es.type'='tajo_es_type'
 > );
 OK
-default> select count(*) from tajo_es_index;
-Progress: 0%, response time: 1.397 sec
-Progress: 0%, response time: 1.398 sec
-Progress: 0%, response time: 1.802 sec
-Progress: 100%, response time: 1.808 sec
+default> select count(*) from tajo_es_parent;
+Progress: 4%, response time: 0.611 sec
+Progress: 4%, response time: 0.612 sec
+Progress: 4%, response time: 1.013 sec
+Progress: 4%, response time: 1.818 sec
+Progress: 29%, response time: 2.82 sec
+Progress: 29%, response time: 3.824 sec
+Progress: 46%, response time: 4.827 sec
+Progress: 100%, response time: 5.103 sec
 ?count
 -------------------------------
-1000
-(1 rows, 1.808 sec, 5 B selected)
+100000
+(1 rows, 5.103 sec, 7 B selected)
 
-default> select * from tajo_es_index where field1 > 10 and field1 < 15;
-Progress: 100%, response time: 0.583 sec
-_type,  _score,  _id,  field1,  field2,  field3
+default> select * from tajo_es_parent where field1 > 10 and field1 < 15;
+Progress: 8%, response time: 0.779 sec
+Progress: 8%, response time: 0.78 sec
+Progress: 8%, response time: 1.183 sec
+Progress: 8%, response time: 1.987 sec
+Progress: 49%, response time: 2.992 sec
+Progress: 49%, response time: 3.997 sec
+Progress: 81%, response time: 5.002 sec
+Progress: 81%, response time: 6.007 sec
+Progress: 100%, response time: 6.111 sec
+_type,  _score,  _id,  field1,  field2,  field3,  field4
 -------------------------------
-tajo_es_type,  0.0,  11,  11,  henry11,  11. hello world!! elasticsearch on apache tajo!!
-tajo_es_type,  0.0,  12,  12,  henry12,  12. hello world!! elasticsearch on apache tajo!!
-tajo_es_type,  0.0,  13,  13,  henry13,  13. hello world!! elasticsearch on apache tajo!!
-tajo_es_type,  0.0,  14,  14,  henry14,  14. hello world!! elasticsearch on apache tajo!!
-(4 rows, 0.583 sec, 320 B selected)
+tajo_es_type,  1.0,  11,  11,  8,  henry4,  11. hello world!! elasticsearch on apache tajo!!
+tajo_es_type,  1.0,  12,  12,  2,  henry6,  12. hello world!! elasticsearch on apache tajo!!
+tajo_es_type,  1.0,  13,  13,  4,  henry7,  13. hello world!! elasticsearch on apache tajo!!
+tajo_es_type,  1.0,  14,  14,  9,  henry9,  14. hello world!! elasticsearch on apache tajo!!
+(4 rows, 6.111 sec, 324 B selected)
 ```
 
 # Elasticsearch "with" Options
