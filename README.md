@@ -1,3 +1,5 @@
+[NO LONGER MAINTAINED]
+
 # Apache Tajo & Elasticsearch
 * Collaborate Apache Tajo + Elasticsearch
 
